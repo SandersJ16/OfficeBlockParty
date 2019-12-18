@@ -2,7 +2,7 @@
 
 namespace BlockParty;
 
-use PhpOffice\Spreadsheet\Spreadsheet;
+use PhpOffice\Spreadsheet;
 
 class BlockSpreadSheet extends Spreadsheet {
 
