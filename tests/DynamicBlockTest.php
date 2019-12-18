@@ -23,7 +23,8 @@ final class DynamicBlockTest extends TestCase
      *
      * @return void
      */
-    public function testGetWidthOnEmptyBlock() {
+    public function testGetWidthOnEmptyBlock()
+    {
         $block = new DynamicBlock();
         $this->assertEquals(0, $block->getWidth());
     }
