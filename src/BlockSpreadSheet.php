@@ -4,9 +4,10 @@ namespace BlockParty;
 
 use PhpOffice\Spreadsheet;
 
-class BlockSpreadSheet extends Spreadsheet {
-
-    public function __construct() {
+class BlockSpreadSheet extends Spreadsheet
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->disconnectWorksheets();
         $this->createWorksheet();
