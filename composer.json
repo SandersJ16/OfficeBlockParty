@@ -1,0 +1,19 @@
+{
+    "name": "sandersj16/blockparty",
+    "description": "PHPOffice/PHPSpreadSheet extension for supporting Cell Blocks",
+    "authors": [
+        {
+            "name": "Justin Sanders"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "BlockParty": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.1",
+        "phpoffice/phpspreadsheet": "^1.10"
+    }
+}
