@@ -9,11 +9,14 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "BlockParty": "src/"
+            "BlockParty\\": "src/"
         }
     },
     "require": {
         "php": "^7.1",
         "phpoffice/phpspreadsheet": "^1.10"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
     }
 }
