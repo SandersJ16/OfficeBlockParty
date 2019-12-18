@@ -16,6 +16,11 @@
         "php": "^7.1",
         "phpoffice/phpspreadsheet": "^1.10"
     },
+    "autoload-dev": {
+        "psr-4": {
+            "BlockParty\\Test\\": "tests/"
+        }
+    },
     "require-dev": {
         "phpunit/phpunit": "^8"
     }
