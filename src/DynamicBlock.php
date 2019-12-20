@@ -53,8 +53,15 @@ class DynamicBlock implements Block
     {
         list($row, $column) = Coordinate::coordinateFromString($cell);
         $row = Coordinate::columnIndexFromString($row);
-        $this->cells[$row][$column] = null;
+        $this->cells[$row][$column] = $data;
 
         return $this;
+    }
+
+    public function getCellData($cell)
+    {
+        list($row, $column) = Coordinate::coordinateFromString($cell);
+        $row = Coordinate::columnIndexFromString($row);
+        return $this->cells[$row][$column];
     }
 }

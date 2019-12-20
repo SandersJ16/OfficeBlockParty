@@ -99,4 +99,22 @@ final class DynamicBlockTest extends TestCase
         $block->$testing_function(...$function_arguments);
         $this->assertEquals($expected_width, $block->getWidth());
     }
+
+    /**
+     * Test adding a cell to a block with a text value retains text
+     *
+     * @return void
+     */
+    public function testAddingCellWithOnlyText()
+    {
+        $cell = "D12";
+        $expected_cell_value = 'test';
+
+        $block = new DynamicBlock();
+        $block->addCell($cell, $expected_cell_value);
+
+        $cell_value = $block->getCellData($cell);
+
+        $this->assertEquals($expected_cell_value, $cell_value);
+    }
 }
