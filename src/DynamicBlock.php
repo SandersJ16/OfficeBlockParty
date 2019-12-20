@@ -33,7 +33,12 @@ class DynamicBlock implements Block
      */
     public function getWidth()
     {
-        return 0;
+        $max_cell_width = 0;
+        foreach ($this->cells as $cell_row) {
+            $max_row_column = max(array_keys($cell_row));
+            $max_cell_width = max($max_row_column, $max_cell_width);
+        }
+        return $max_cell_width;
     }
 
     /**
