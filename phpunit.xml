@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php"
+         testdox="false"
+         noInteraction="false"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         cacheResult="false"
+         cacheTokens="false"
+         colors="true"
+         columns="80"
+         convertDeprecationsToExceptions="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         disableCodeCoverageIgnore="false"
+         forceCoversAnnotation="false"
+         printerClass="PHPUnit\TextUI\ResultPrinter"
+         processIsolation="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnRisky="false"
+         stopOnSkipped="false"
+         stopOnWarning="false"
+         stopOnDefect="false"
+         failOnRisky="false"
+         failOnWarning="false"
+         beStrictAboutChangesToGlobalState="false"
+         beStrictAboutOutputDuringTests ="false"
+         beStrictAboutResourceUsageDuringSmallTests="false"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutTodoAnnotatedTests="false"
+         beStrictAboutCoversAnnotation="false"
+         ignoreDeprecatedCodeUnitsFromCodeCoverage="false"
+         enforceTimeLimit="false"
+         defaultTimeLimit="0"
+         timeoutForSmallTests="1"
+         timeoutForMediumTests="10"
+         timeoutForLargeTests="60"
+         testSuiteLoaderClass="PHPUnit\Runner\StandardTestSuiteLoader"
+         registerMockObjectsFromTestArgumentsRecursively="false"
+         reverseDefectList="false"
+         resolveDependencies="true"
+         verbose="false"
+         stderr="false">
+
+    <testsuites>
+      <testsuite name="Dynamic Block">
+         <directory suffix="Test.php" phpVersion="7.0.0" phpVersionOperator=">=">./tests</directory>
+      </testsuite>
+   </testsuites>
+
+</phpunit>
