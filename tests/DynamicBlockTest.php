@@ -4,6 +4,7 @@ namespace BlockParty\Test;
 
 use BlockParty\DynamicBlock;
 use PHPUnit\Framework\TestCase;
+use BlockParty\Exceptions\CellOutOfBlockException;
 
 final class DynamicBlockTest extends TestCase
 {
@@ -101,7 +102,25 @@ final class DynamicBlockTest extends TestCase
     }
 
     /**
-     * Test adding a cell to a block with a text value retains text
+     * Test adding a cell with no data returns null
+     *
+     * @return void
+     */
+    public function testAddingEmptyCell()
+    {
+        $cell = "BA2";
+        $expected_cell_value = null;
+
+        $block = new DynamicBlock();
+        $block->addCell($cell, $expected_cell_value);
+
+        $cell_value = $block->getCellData($cell);
+
+        $this->assertEquals($expected_cell_value, $cell_value);
+    }
+
+    /**
+     * Test adding a cell to a block with a text value returns that text
      *
      * @return void
      */
@@ -116,5 +135,19 @@ final class DynamicBlockTest extends TestCase
         $cell_value = $block->getCellData($cell);
 
         $this->assertEquals($expected_cell_value, $cell_value);
+    }
+
+    /**
+     * Test getting cell data from outside of the block throws the approriate exception
+     *
+     * @return void
+     */
+    public function testGettingCellDataFromOutsideOfBlock()
+    {
+        $block = new DynamicBlock();
+        $block->addCell('B2', null);
+
+        $this->expectException(CellOutOfBlockException::class);
+        $cell_value = $block->getCellData('C3');
     }
 }

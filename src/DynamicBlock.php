@@ -4,6 +4,8 @@ namespace BlockParty;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
+use BlockParty\Exceptions\CellOutOfBlockException;
+
 class DynamicBlock implements Block
 {
     /**
@@ -58,10 +60,21 @@ class DynamicBlock implements Block
         return $this;
     }
 
+    /**
+     * Get the data stored in a cell in this block
+     *
+     * @param  string $cell The cell's name
+     *
+     * @return string
+     */
     public function getCellData($cell)
     {
         list($row, $column) = Coordinate::coordinateFromString($cell);
         $row = Coordinate::columnIndexFromString($row);
+
+        if ($row > $this->getHeight() || $column > $this->getWidth()) {
+            throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $cell));
+        }
         return $this->cells[$row][$column];
     }
 }
