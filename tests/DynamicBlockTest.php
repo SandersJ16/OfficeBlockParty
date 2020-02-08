@@ -42,9 +42,9 @@ final class DynamicBlockTest extends TestCase
             'Test adding a cell with a null value still affects height' =>
                 ['addCell', ['E1', null], 5],
             'Test adding a cell to the first row sets height to 1' =>
-                ['addCell', ['A1', 'test'], 1],
+                ['addCell', ['A3', 'test'], 1],
             "Test adding a cell to any row greater than 1 sets the height to that cell's row" =>
-                ['addCell', ['AX1', 'test'], 50],
+                ['addCell', ['AX7', 'test'], 50],
         ];
     }
 
@@ -77,7 +77,7 @@ final class DynamicBlockTest extends TestCase
             'Test adding a cell with a null value still affects width' =>
                 ['addCell', ['A5', null], 5],
             'Test adding a cell to the first column sets width to 1' =>
-                ['addCell', ['A1', 'test'], 1],
+                ['addCell', ['C1', 'test'], 1],
             "Test adding a cell to any column greater than 1 sets the width to that cell's row" =>
                 ['addCell', ['B50', 'test'], 50],
         ];
