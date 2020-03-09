@@ -150,4 +150,13 @@ final class DynamicBlockTest extends TestCase
         $this->expectException(CellOutOfBlockException::class);
         $cell_value = $block->getCellData('C3');
     }
+
+    public function testGettingSizedBlock()
+    {
+        $height = 45;
+        $width = 32;
+        $block = DynamicBlock::getSizedBlock($height, $width);
+        $this->assertEquals($width, $block->getWidth());
+        $this->assertEquals($height, $block->getHeight());
+    }
 }

@@ -29,6 +29,23 @@ class DynamicBlock implements Block
     }
 
     /**
+     * Get an empty block that already has a specific height and width
+     *
+     * @param  int    $height
+     * @param  int    $width
+     *
+     * @return self
+     */
+    public static function getSizedBlock(int $height, int $width)
+    {
+        $block = new self();
+        $column_letter = Coordinate::stringFromColumnIndex($height);
+        $bottom_corner_cell = $column_letter . $width;
+        $block->addCell($bottom_corner_cell, null);
+        return $block;
+    }
+
+    /**
      * Get the width of this XlsxBlock
      *
      * @return int
