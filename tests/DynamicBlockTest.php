@@ -160,6 +160,10 @@ final class DynamicBlockTest extends TestCase
                 [0, 3, CellOutOfBlockException::class],
             'Test getting a sized block with a width of 0 throws an exception' =>
                 [10, 0, CellOutOfBlockException::class],
+            'Test getting a sized block with a negative height throws an exception' =>
+                [-12, 3, CellOutOfBlockException::class],
+            'Test getting a sized block with a negative width throws an exception' =>
+                [15, -4, CellOutOfBlockException::class]
         ];
     }
 
