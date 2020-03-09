@@ -2,4 +2,7 @@
 
 namespace BlockParty\Exceptions;
 
-interface BlockPartyExceptionInterface {}
+interface BlockPartyExceptionInterface
+{
+
+}
