@@ -138,7 +138,7 @@ final class DynamicBlockTest extends TestCase
     }
 
     /**
-     * Test getting cell data from outside of the block throws the approriate exception
+     * Test getting cell data from outside of the block throws the appropriate exception
      *
      * @return void
      */
@@ -151,6 +151,12 @@ final class DynamicBlockTest extends TestCase
         $cell_value = $block->getCellData('C3');
     }
 
+    /**
+     * Test that DynamicBlock::getSizedBlock returns
+     * a block with the expected height and width
+     *
+     * @return void
+     */
     public function testGettingSizedBlock()
     {
         $height = 45;
@@ -158,5 +164,31 @@ final class DynamicBlockTest extends TestCase
         $block = DynamicBlock::getSizedBlock($height, $width);
         $this->assertEquals($width, $block->getWidth());
         $this->assertEquals($height, $block->getHeight());
+    }
+
+    /**
+     * Test that DynamicBlock::getSizedBlock throws an exception when passed a height of 0
+     *
+     * @return void
+     */
+    public function testGettingSizedBlockWithZeroWidth()
+    {
+        $height = 0;
+        $width = 32;
+        $this->expectException(CellOutOfBlockException::class);
+        $block = DynamicBlock::getSizedBlock($height, $width);
+    }
+
+    /**
+     * Test that DynamicBlock::getSizedBlock throws an exception when passed a width of 0
+     *
+     * @return void
+     */
+    public function testGettingSizedBlockWithZeroHeight()
+    {
+        $height = 10;
+        $width = 0;
+        $this->expectException(CellOutOfBlockException::class);
+        $block = DynamicBlock::getSizedBlock($height, $width);
     }
 }

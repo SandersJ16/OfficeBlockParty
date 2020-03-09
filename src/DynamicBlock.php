@@ -38,6 +38,12 @@ class DynamicBlock implements Block
      */
     public static function getSizedBlock(int $height, int $width)
     {
+        if ($height <= 0) {
+            throw new CellOutOfBlockException(sprintf("Sized Block has a minium height of 1, '%i' specified", $height));
+        } elseif ($width <= 0) {
+            throw new CellOutOfBlockException(sprintf("Sized Block has a minium width of 1, '%i' specified", $width));
+        }
+
         $block = new self();
         $column_letter = Coordinate::stringFromColumnIndex($height);
         $bottom_corner_cell = $column_letter . $width;
