@@ -151,44 +151,39 @@ final class DynamicBlockTest extends TestCase
         $cell_value = $block->getCellData('C3');
     }
 
-    /**
-     * Test that DynamicBlock::getSizedBlock returns
-     * a block with the expected height and width
-     *
-     * @return void
-     */
-    public function testGettingSizedBlock()
+    public function getSizedBlockDataProvider()
     {
-        $height = 45;
-        $width = 32;
-        $block = DynamicBlock::getSizedBlock($height, $width);
-        $this->assertEquals($width, $block->getWidth());
-        $this->assertEquals($height, $block->getHeight());
+        return [
+            'Test getting a sized block with a valid height and width' =>
+                [45, 32, null],
+            'Test getting a sized block with a height of 0 throws an exception' =>
+                [0, 3, CellOutOfBlockException::class],
+            'Test getting a sized block with a width of 0 throws an exception' =>
+                [10, 0, CellOutOfBlockException::class],
+        ];
     }
 
     /**
-     * Test that DynamicBlock::getSizedBlock throws an exception when passed a height of 0
+     * Test the getSizedBlock method
+     *
+     * @dataProvider getSizedBlockDataProvider
+     *
+     * @param  int     $height                   Height of the sized block requested
+     * @param  int     $width                    Width of the sized block requested
+     * @param  ?string $expected_exception_class The class of the exception that should be thrown,
+     *                                           null if no exception should be thrown
      *
      * @return void
      */
-    public function testGettingSizedBlockWithZeroWidth()
+    public function testGettingSizedBlock(int $height, int $width, ?string $expected_exception_class)
     {
-        $height = 0;
-        $width = 32;
-        $this->expectException(CellOutOfBlockException::class);
+        if ($expected_exception_class) {
+            $this->expectException($expected_exception_class);
+        }
         $block = DynamicBlock::getSizedBlock($height, $width);
-    }
-
-    /**
-     * Test that DynamicBlock::getSizedBlock throws an exception when passed a width of 0
-     *
-     * @return void
-     */
-    public function testGettingSizedBlockWithZeroHeight()
-    {
-        $height = 10;
-        $width = 0;
-        $this->expectException(CellOutOfBlockException::class);
-        $block = DynamicBlock::getSizedBlock($height, $width);
+        if (!$expected_exception_class) {
+            $this->assertEquals($width, $block->getWidth());
+            $this->assertEquals($height, $block->getHeight());
+        }
     }
 }
