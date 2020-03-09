@@ -2,7 +2,10 @@
 
 namespace BlockParty;
 
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 use BlockParty\Exceptions\CellOutOfBlockException;
 
@@ -17,6 +20,22 @@ class DynamicBlock implements Block
      * @var array
      */
     private $cells = array();
+
+    /**
+     * This will be the worksheet that new cells are initilized with.
+     * The Cell class requires a Worksheet in order to be initilized
+     * so we give each block its own worksheet to hold the cells.
+     * This worksheet is only to keep track of the cells, it will
+     * not be added to the actual spreadsheet
+     *
+     * @var PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+     */
+    private $temp_worksheet;
+
+    public function __construct()
+    {
+        $this->temp_worksheet = new Worksheet();
+    }
 
     /**
      * Get the height of this XlsxBlock
@@ -36,7 +55,7 @@ class DynamicBlock implements Block
      *
      * @return self
      */
-    public static function getSizedBlock(int $height, int $width)
+    public static function getSizedBlock(int $height, int $width) : self
     {
         if ($height <= 0) {
             throw new CellOutOfBlockException(sprintf("Sized Block has a minium height of 1, '%i' specified", $height));
@@ -46,8 +65,8 @@ class DynamicBlock implements Block
 
         $block = new self();
         $column_letter = Coordinate::stringFromColumnIndex($height);
-        $bottom_corner_cell = $column_letter . $width;
-        $block->addCell($bottom_corner_cell, null);
+        $bottom_corner_coordinate = $column_letter . $width;
+        $block->addCell($bottom_corner_coordinate, null);
         return $block;
     }
 
@@ -56,7 +75,7 @@ class DynamicBlock implements Block
      *
      * @return int
      */
-    public function getWidth()
+    public function getWidth() : int
     {
         $max_cell_width = 0;
         foreach ($this->cells as $cell_row) {
@@ -69,34 +88,67 @@ class DynamicBlock implements Block
     /**
      * Add a cell to this block
      *
-     * @param  string $cell The cell's name
-     * @param  mixed $data
+     * @param  string  $coordinate The cell's coordinate relative to this block
+     * @param  mixed   $data
+     * @param  ?string $data_type  The data type of the new cell
+     *                             (see DataType class constants for valid values)
      *
      * @return self
      */
-    public function addCell($cell, $data)
+    public function addCell($coordinate, $data, $data_type = null) : self
     {
-        list($row, $column) = Coordinate::coordinateFromString($cell);
+        list($row, $column) = Coordinate::coordinateFromString($coordinate);
         $row = Coordinate::columnIndexFromString($row);
-        $this->cells[$row][$column] = $data;
+        $this->cells[$row][$column] = $this->createNewCell($data, $data_type);
 
         return $this;
     }
 
     /**
+     * Create a new Cell to be used in this block
+     *
+     * @param  mixed  $data      The data to set as this cell's value
+     * @param  string $data_type The data type of this sell
+     *                           (see DataType class constants for valid values)
+     *
+     * @return PhpOffice\PhpSpreadsheet\Cell\Cell
+     */
+    private function createNewCell($data, $data_type) : Cell
+    {
+        if (empty($data_type)) {
+            $data_type = DataType::TYPE_NULL;
+        }
+        $cell = new Cell($data, $data_type, $this->temp_worksheet);
+        return $cell;
+    }
+
+    /**
      * Get the data stored in a cell in this block
      *
-     * @param  string $cell The cell's name
+     * @param  string $coordinate The cell's coordinate relative to this block
      *
      * @return string
      */
-    public function getCellData($cell)
+    public function getCellData($coordinate)
     {
-        list($row, $column) = Coordinate::coordinateFromString($cell);
+        $cell = $this->getCell($coordinate);
+        return $cell->getValue();
+    }
+
+    /**
+     * Get a cell from this block
+     *
+     * @param  string $coordinate The cell's coordinate relative to this block
+     *
+     * @return PhpOffice\PhpSpreadsheet\Cell\Cell;
+     */
+    public function getCell($coordinate) : Cell
+    {
+        list($row, $column) = Coordinate::coordinateFromString($coordinate);
         $row = Coordinate::columnIndexFromString($row);
 
         if ($row > $this->getHeight() || $column > $this->getWidth()) {
-            throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $cell));
+            throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $coordinate));
         }
         return $this->cells[$row][$column];
     }
