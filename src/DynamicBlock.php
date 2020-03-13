@@ -149,6 +149,8 @@ class DynamicBlock implements Block
 
         if ($row > $this->getHeight() || $column > $this->getWidth()) {
             throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $coordinate));
+        } elseif (!isset($this->cells[$row][$column])) {
+            $this->addCell($coordinate, null);
         }
         return $this->cells[$row][$column];
     }

@@ -151,6 +151,25 @@ final class DynamicBlockTest extends TestCase
         $cell_value = $block->getCellData('C3');
     }
 
+    /**
+     * Test getting a cell inside of a block that has never had addCell called on it
+     *
+     * @return void
+     */
+    public function testGettingCellDataFromCellNeverExpclitilySetButInBlockRange()
+    {
+        $block = new DynamicBlock();
+        $block->addCell('Z20', null);
+
+        $cell_value = $block->getCellData('A1');
+        $this->assertEquals(null, $cell_value);
+    }
+
+    /**
+     * Data Provider for testing DynamicBlock::getSizedBlock method
+     *
+     * @return array
+     */
     public function getSizedBlockDataProvider()
     {
         return [
