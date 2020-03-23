@@ -154,7 +154,7 @@ final class DynamicBlockTest extends TestCase
     }
 
     /**
-     * Test getting a cell inside of a block that has never had addCell called on it
+     * Test getting cell data from inside of a block that has never had addCell called on it
      *
      * @return void
      */
@@ -264,5 +264,34 @@ final class DynamicBlockTest extends TestCase
         $data_type = $arguments['data_type'];
         $cell = $arguments['cell'];
         $this->assertEquals($data_type, $cell->getDataType());
+    }
+
+    /**
+     * Test getting a cell from outside of the block throws the appropriate exception
+     *
+     * @return void
+     */
+    public function testGettingCellFromOutsideOfBlock()
+    {
+        $block = new DynamicBlock();
+        $block->addCell('B2', null);
+
+        $this->expectException(CellOutOfBlockException::class);
+        $cell = $block->getCell('C3');
+    }
+
+    /**
+     * Test getting a cell inside of a block that has never had addCell called on it
+     *
+     * @return void
+     */
+    public function testGettingCellDataFromCellNeverExpclitilySetButInBlockRange()
+    {
+        $block = new DynamicBlock();
+        $block->addCell('Z20', null);
+
+        $cell = $block->getCell('A1');
+        $this->assertInstanceOf(Cell::class, $cell);
+        $this->assertEquals(null, $cell->getValue());
     }
 }
