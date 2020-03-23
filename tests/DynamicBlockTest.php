@@ -285,7 +285,7 @@ final class DynamicBlockTest extends TestCase
      *
      * @return void
      */
-    public function testGettingCellDataFromCellNeverExpclitilySetButInBlockRange()
+    public function testGettingCellFromCellNeverExpclitilySetButInBlockRange()
     {
         $block = new DynamicBlock();
         $block->addCell('Z20', null);
