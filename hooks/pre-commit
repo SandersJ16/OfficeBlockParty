@@ -1,4 +1,6 @@
 #!/bin/bash
 
-./vendor/bin/phpunit -c phpunit.xml
-./vendor/bin/phpcs --standard=phpcs.xml
+./vendor/bin/phpunit -c phpunit.xml \
+  && ./vendor/bin/phpcs --standard=phpcs.xml
+
+exit $?
