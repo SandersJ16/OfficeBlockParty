@@ -4,6 +4,8 @@ namespace BlockParty\Test;
 
 use BlockParty\DynamicBlock;
 use PHPUnit\Framework\TestCase;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use BlockParty\Exceptions\CellOutOfBlockException;
 
 final class DynamicBlockTest extends TestCase
@@ -208,5 +210,59 @@ final class DynamicBlockTest extends TestCase
             $this->assertEquals($width, $block->getWidth());
             $this->assertEquals($height, $block->getHeight());
         }
+    }
+
+    /**
+     * Test that DynamicBlock::getCell returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell
+     *
+     * @return array<string, string, Cell>
+     */
+    public function testGetCellReturnsAPHPSpreadsheetCell()
+    {
+        $value = 'Test Value';
+        $data_type = DataType::TYPE_STRING;
+
+        $block = new DynamicBlock();
+        $block->addCell('A1', $value, $data_type);
+        $cell = $block->getCell('A1');
+
+        $this->assertInstanceOf(Cell::class, $cell);
+        return ['value'     => $value,
+                'data_type' => $data_type,
+                'cell'      => $cell];
+    }
+
+    /**
+     * Test that DynamicBlock::getCell returns a cell with the expected value
+     *
+     * @depends testGetCellReturnsAPHPSpreadsheetCell
+     *
+     * @param  array $arguments     An array containing the cell returned by the method,
+     *                              expected value and expected data type
+     *
+     * @return void
+     */
+    public function testTheCellReturnedByGetCellContainsTheRightValue(array $arguments)
+    {
+        $value = $arguments['value'];
+        $cell = $arguments['cell'];
+        $this->assertEquals($value, $cell->getValue());
+    }
+
+    /**
+     * Test that DynamicBlock::getCell returns a cell with the expected data type
+     *
+     * @depends testGetCellReturnsAPHPSpreadsheetCell
+     *
+     * @param  array $arguments     An array containing the cell returned by the method,
+     *                              expected value and expected data type
+     *
+     * @return void
+     */
+    public function testTheCellReturnedByGetCellContainsTheRightDataType(array $arguments)
+    {
+        $data_type = $arguments['data_type'];
+        $cell = $arguments['cell'];
+        $this->assertEquals($data_type, $cell->getDataType());
     }
 }
