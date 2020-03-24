@@ -6,20 +6,18 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Collection\CellsFactory;
 
 use BlockParty\Exceptions\CellOutOfBlockException;
 
 class DynamicBlock implements Block
 {
     /**
-     * The cells that will be rendered by this block,
-     * it's a multidimensional array with the row index
-     * as the first key and the column index as the second
-     * key (both column and key indexes start at 1)
+     * The cells that will be rendered by this block
      *
-     * @var array
+     * @var PhpOffice\PhpSpreadsheet\Collection\Cells
      */
-    private $cells = array();
+    private $cells;
 
     /**
      * This will be the worksheet that new cells are initilized with.
@@ -35,6 +33,7 @@ class DynamicBlock implements Block
     public function __construct()
     {
         $this->temp_worksheet = new Worksheet();
+        $this->cells = CellsFactory::getInstance($this->temp_worksheet);
     }
 
     /**
@@ -44,7 +43,7 @@ class DynamicBlock implements Block
      */
     public function getHeight()
     {
-        return $this->cells ? max(array_keys($this->cells)) : 0;
+        return !empty($this->cells->getCoordinates()) ? $this->cells->getHighestRow() : 0;
     }
 
     /**
@@ -77,12 +76,18 @@ class DynamicBlock implements Block
      */
     public function getWidth() : int
     {
-        $max_cell_width = 0;
-        foreach ($this->cells as $cell_row) {
-            $max_row_column = max(array_keys($cell_row));
-            $max_cell_width = max($max_row_column, $max_cell_width);
-        }
-        return $max_cell_width;
+        $column = $this->getHighestColumn();
+        return isset($column) ? Coordinate::columnIndexFromString($column) : 0;
+    }
+
+    /**
+     * Gets the rightmost column of the block
+     *
+     * @return ?string Returns null if there are no cells in the block
+     */
+    public function getHighestColumn()
+    {
+        return !empty($this->cells->getCoordinates()) ? $this->cells->getHighestColumn() : null;
     }
 
     /**
@@ -97,10 +102,7 @@ class DynamicBlock implements Block
      */
     public function addCell($coordinate, $data, $data_type = null) : self
     {
-        list($column, $row) = Coordinate::coordinateFromString($coordinate);
-        $column = Coordinate::columnIndexFromString($column);
-        $this->cells[$row][$column] = $this->createNewCell($data, $data_type);
-
+        $this->cells->add($coordinate, $this->createNewCell($data, $data_type));
         return $this;
     }
 
@@ -149,9 +151,9 @@ class DynamicBlock implements Block
 
         if ($row > $this->getHeight() || $column > $this->getWidth()) {
             throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $coordinate));
-        } elseif (!isset($this->cells[$row][$column])) {
+        } elseif (!$this->cells->has($coordinate)) {
             $this->addCell($coordinate, null);
         }
-        return $this->cells[$row][$column];
+        return $this->cells->get($coordinate);
     }
 }
