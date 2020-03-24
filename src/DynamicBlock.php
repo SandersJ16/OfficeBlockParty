@@ -64,8 +64,8 @@ class DynamicBlock implements Block
         }
 
         $block = new self();
-        $column_letter = Coordinate::stringFromColumnIndex($height);
-        $bottom_corner_coordinate = $column_letter . $width;
+        $column_letter = Coordinate::stringFromColumnIndex($width);
+        $bottom_corner_coordinate = $column_letter . $height;
         $block->addCell($bottom_corner_coordinate, null);
         return $block;
     }
@@ -97,8 +97,8 @@ class DynamicBlock implements Block
      */
     public function addCell($coordinate, $data, $data_type = null) : self
     {
-        list($row, $column) = Coordinate::coordinateFromString($coordinate);
-        $row = Coordinate::columnIndexFromString($row);
+        list($column, $row) = Coordinate::coordinateFromString($coordinate);
+        $column = Coordinate::columnIndexFromString($column);
         $this->cells[$row][$column] = $this->createNewCell($data, $data_type);
 
         return $this;
@@ -144,8 +144,8 @@ class DynamicBlock implements Block
      */
     public function getCell($coordinate) : Cell
     {
-        list($row, $column) = Coordinate::coordinateFromString($coordinate);
-        $row = Coordinate::columnIndexFromString($row);
+        list($column, $row) = Coordinate::coordinateFromString($coordinate);
+        $column = Coordinate::columnIndexFromString($column);
 
         if ($row > $this->getHeight() || $column > $this->getWidth()) {
             throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $coordinate));
