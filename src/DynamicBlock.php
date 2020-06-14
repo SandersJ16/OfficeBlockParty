@@ -156,4 +156,8 @@ class DynamicBlock implements Block
         }
         return $this->cells->get($coordinate);
     }
+
+    public function getRelativeCellCoordinates() {
+        return $this->cells->getCoordinates();
+    }
 }

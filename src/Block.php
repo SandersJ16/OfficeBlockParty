@@ -28,4 +28,6 @@ interface Block
      * @return PhpOffice\PhpSpreadsheet\Cell\Cell;
      */
     public function getCell($coordinate) : Cell;
+
+    public function getRelativeCellCoordinates();
 }
