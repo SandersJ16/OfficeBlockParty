@@ -26,45 +26,50 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
-     * Test that a spreadsheet with an empty CompactBlockWorksheet doesn't render any cells
+     * Test that an empty CompactBlockWorksheet produces correct output
      *
      * @return void
      */
     public function testSpreadsheetWithEmptyCompactBlockWorksheet()
     {
-        $file_location = $this->getTempLocation() . 'testSpreadsheetWithEmptyCompactBlockWorksheet.xlsx';
-
-        $spreadsheet = new Spreadsheet();
-        $spreadsheet->disconnectWorksheets();
-
         $compact_block_worksheet = new CompactBlockWorksheet();
-        $spreadsheet->addSheet($compact_block_worksheet);
-
-        $xlsx_writer = new XlsxWriter($spreadsheet);
-        $xlsx_writer->save($file_location);
-
-        $xlsx_reader = new XlsxReader();
-        $rendered_spreadsheet = $xlsx_reader->load($file_location);
-
-        $rendered_worksheet = $rendered_spreadsheet->getSheet(0);
-        $rendered_cells = $rendered_worksheet->getCellCollection();
-
-        $this->assertEmpty($rendered_cells->getCoordinates(), "Failed XLSX file viewable at: '${file_location}'");
-        unlink($file_location);
+        $expected_coordinate_values = array();
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
     }
 
+    /**
+     * Test that a CompactBlockWorksheet with a single block produces correct output
+     *
+     * @return void
+     */
     public function testSpreadsheetWithSingleCompactBlockWorksheet()
     {
-        $file_location = $this->getTempLocation() . 'testSpreadsheetWithSingleCompactBlockWorksheet.xlsx';
+        $dynamic_block = new DynamicBlock();
+        $dynamic_block->addCell('B2', 'test');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow($dynamic_block);
+
+        $expected_coordinate_values = array('B2' => 'test');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+    /**
+     * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
+     *
+     * @param  BlockWorksheet $worksheet
+     * @param  Iterable       $expected_coordinate_values
+     * @param  string         $temp_file_name
+     *
+     * @return void
+     */
+    private function assertBlockWorksheetProducesExepectedResults($worksheet, $expected_coordinate_values, $temp_file_name)
+    {
+        $file_location = $this->getTempLocation() . $temp_file_name;
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->disconnectWorksheets();
-
-        $dynamic_block = new DynamicBlock();
-        $dynamic_block->addCell('B2', 'test');
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block);
-        $spreadsheet->addSheet($compact_block_worksheet);
+        $spreadsheet->addSheet($worksheet);
 
         $xlsx_writer = new XlsxWriter($spreadsheet);
         $xlsx_writer->save($file_location);
@@ -76,9 +81,11 @@ final class CompactBlockWorksheetTest extends TestCase
         $rendered_cells = $rendered_worksheet->getCellCollection();
 
         $error_message = "Failed XLSX file viewable at: '${file_location}'";
-        $this->assertEquals(1, count($rendered_cells->getCoordinates()));
-        $this->assertTrue($rendered_cells->has('B2'), $error_message);
-        $this->assertEquals('test', $rendered_cells->get('B2')->getValue());
+        $this->assertEquals(count($expected_coordinate_values), count($rendered_cells->getCoordinates()), $error_message);
+        foreach ($expected_coordinate_values as $coordinate => $value) {
+            $this->assertTrue($rendered_cells->has($coordinate), $error_message);
+            $this->assertEquals($value, $rendered_cells->get($coordinate)->getValue());
+        }
         unlink($file_location);
     }
 }

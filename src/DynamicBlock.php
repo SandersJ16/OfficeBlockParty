@@ -157,7 +157,13 @@ class DynamicBlock implements Block
         return $this->cells->get($coordinate);
     }
 
-    public function getRelativeCellCoordinates() {
+    /**
+     * Get the current cell coordinates for all data in this block relative to this block
+     *
+     * @return array
+     */
+    public function getRelativeCellCoordinates()
+    {
         return $this->cells->getCoordinates();
     }
 }

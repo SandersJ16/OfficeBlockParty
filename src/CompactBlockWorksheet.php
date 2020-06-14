@@ -8,13 +8,15 @@ class CompactBlockWorksheet extends BlockWorksheet
 {
     protected $blocks = array();
 
-    public function addBlockAsRow(Block $block) {
+    public function addBlockAsRow(Block $block)
+    {
         $this->blocks[] = array($block);
-        $this->prime($this->blocks);
+        $this->populateCellsFromBlocks($this->blocks);
         return $this;
     }
 
-    protected function prime($blocks) {
+    protected function populateCellsFromBlocks($blocks)
+    {
         $this->clearCells();
 
         $horizontal_translation = 0;
@@ -22,7 +24,6 @@ class CompactBlockWorksheet extends BlockWorksheet
         foreach ($blocks as $rows) {
             $row_max_cell_height = 0;
             foreach ($rows as $block) {
-
                 $relative_coordinates = $block->getRelativeCellCoordinates();
                 foreach ($relative_coordinates as $coordinate) {
                     $coordinate_parts = Coordinate::coordinateFromString($coordinate);

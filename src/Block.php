@@ -29,5 +29,10 @@ interface Block
      */
     public function getCell($coordinate) : Cell;
 
+    /**
+     * Get the current cell coordinates for all data in this block relative to this block
+     *
+     * @return array
+     */
     public function getRelativeCellCoordinates();
 }
