@@ -2,7 +2,7 @@
 
 namespace BlockParty;
 
-use PhpOffice\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class BlockWorksheet extends Worksheet
 {
