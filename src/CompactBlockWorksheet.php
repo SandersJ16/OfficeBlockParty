@@ -28,6 +28,35 @@ class CompactBlockWorksheet extends BlockWorksheet
     }
 
     /**
+     * Add a block as a new column on the current last block row of this worksheet
+     *
+     * @param  Block $block
+     *
+     * @return self
+     */
+    public function appendBlockAsColumn(Block $block)
+    {
+        $last_key = count($this->block_rows);
+        $this->appendBlockToColumn($block, $last_key);
+        return $this;
+    }
+
+    /**
+     * Add a block as a new column to a specific row number on this worksheet
+     *
+     * @param  Block $block
+     * @param  int   $row_number
+     *
+     * @return XlsxBlockWorksheet
+     */
+    public function appendBlockToColumn(Block $block, int $row_number)
+    {
+        $this->block_rows[$row_number - 1][] = $block;
+        $this->populateCellsFromBlocks($this->block_rows);
+        return $this;
+    }
+
+    /**
      * Populate this worksheets cells from rows of blocks
      *
      * @param  $block_rows
@@ -38,9 +67,9 @@ class CompactBlockWorksheet extends BlockWorksheet
     {
         $this->clearCells();
 
-        $horizontal_translation = 0;
         $vertical_translation = 0;
         foreach ($block_rows as $rows) {
+            $horizontal_translation = 0;
             $row_max_cell_height = 0;
             foreach ($rows as $block) {
                 $relative_coordinates = $block->getRelativeCellCoordinates();

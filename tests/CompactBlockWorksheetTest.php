@@ -55,6 +55,33 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
+     * Test that a CompactBlockWorksheet with multiple blocks added to same column
+     *
+     * @return void
+     */
+    public function testSpreadsheetWithMultipleBlocksInRowCompactBlockWorksheet()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->addCell('B2', 'block 1');
+
+        $dynamic_block_2 = new DynamicBlock();
+        $dynamic_block_2->addCell('C4', 'block 2');
+
+        $dynamic_block_3 = new DynamicBlock();
+        $dynamic_block_3->addCell('A1', 'block 3');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
+                                ->appendBlockAsColumn($dynamic_block_2)
+                                ->appendBlockAsColumn($dynamic_block_3);
+
+        $expected_coordinate_values = array('B2' => 'block 1',
+                                            'E4' => 'block 2',
+                                            'F1' => 'block 3');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+    /**
      * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
      *
      * @param  BlockWorksheet $worksheet
