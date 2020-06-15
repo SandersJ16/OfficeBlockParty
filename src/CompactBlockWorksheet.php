@@ -6,22 +6,41 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class CompactBlockWorksheet extends BlockWorksheet
 {
-    protected $blocks = array();
+    /**
+     * Rows of blocks to be applied to the worksheet
+     *
+     * @var array
+     */
+    protected $block_rows = array();
 
+    /**
+     * Add a block as the first block in a new row on this worksheet
+     *
+     * @param  Block $block
+     *
+     * @return self
+     */
     public function addBlockAsRow(Block $block)
     {
-        $this->blocks[] = array($block);
-        $this->populateCellsFromBlocks($this->blocks);
+        $this->block_rows[] = array($block);
+        $this->populateCellsFromBlocks($this->block_rows);
         return $this;
     }
 
-    protected function populateCellsFromBlocks($blocks)
+    /**
+     * Populate this worksheets cells from rows of blocks
+     *
+     * @param  $block_rows
+     *
+     * @return void
+     */
+    protected function populateCellsFromBlocks($block_rows)
     {
         $this->clearCells();
 
         $horizontal_translation = 0;
         $vertical_translation = 0;
-        foreach ($blocks as $rows) {
+        foreach ($block_rows as $rows) {
             $row_max_cell_height = 0;
             foreach ($rows as $block) {
                 $relative_coordinates = $block->getRelativeCellCoordinates();
