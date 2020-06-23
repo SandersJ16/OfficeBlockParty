@@ -127,7 +127,7 @@ class CompactBlockWorksheet extends BlockWorksheet
         return array_merge(
             array_slice($array, 0, $index),
             array($data),
-            array_slice($array, $index, count($array) - 1)
+            array_slice($array, $index, count($array))
         );
     }
 }

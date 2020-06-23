@@ -204,7 +204,7 @@ final class CompactBlockWorksheetTest extends TestCase
      *
      * @return void
      */
-    public function testInsertBlockAfterRowRendersBlocksCorrectly()
+    public function testInsertBlockAfterRowWhenSuppliedRowIsBetweenTwoRows()
     {
         $dynamic_block_1 = new DynamicBlock();
         $dynamic_block_1->addCell('B2', 'block 1');
@@ -223,6 +223,33 @@ final class CompactBlockWorksheetTest extends TestCase
         $expected_coordinate_values = array('B2' => 'block 1',
                                             'C9' => 'block 2',
                                             'D6' => 'block 3');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+     /**
+     * Test that appendBlockToRow throws an exception when the supplied row is zero
+     *
+     * @return void
+     */
+    public function testInserBlockAfterRowWhenSuppliedRowIsZero()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->addCell('C1', 'block 1');
+
+        $dynamic_block_2 = new DynamicBlock();
+        $dynamic_block_2->addCell('E3', 'block 2');
+
+        $dynamic_block_3 = new DynamicBlock();
+        $dynamic_block_3->addCell('B4', 'block 3');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
+                                ->addBlockAsRow($dynamic_block_2)
+                                ->insertBlockAfterRow($dynamic_block_3, 0);
+
+        $expected_coordinate_values = array('C5' => 'block 1',
+                                            'E8' => 'block 2',
+                                            'B4' => 'block 3');
         $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
     }
 
