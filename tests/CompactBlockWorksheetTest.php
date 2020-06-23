@@ -125,6 +125,39 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
+     * Test that a CompactBlockWorksheet with multiple blocks added as rows and columns
+     * renders correctly, also test the CompactBlockWorksheet::appendBlockToColumn method
+     *
+     * @return void
+     */
+    public function testSpreadsheetWithMultipleRowsAndColumnsOnCompactBlockWorksheet()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->addCell('B5', 'block 1');
+
+        $dynamic_block_2 = new DynamicBlock();
+        $dynamic_block_2->addCell('C4', 'block 2');
+
+        $dynamic_block_3 = new DynamicBlock();
+        $dynamic_block_3->addCell('A3', 'block 3');
+
+        $dynamic_block_4 = new DynamicBlock();
+        $dynamic_block_4->addCell('D2', 'block 4');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
+                                ->addBlockAsRow($dynamic_block_2)
+                                ->appendBlockToColumn($dynamic_block_3, 1)
+                                ->appendBlockToColumn($dynamic_block_4, 2);
+
+        $expected_coordinate_values = array('B5' => 'block 1',
+                                            'C9' => 'block 2',
+                                            'C3' => 'block 3',
+                                            'G7' => 'block 4');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+    /**
      * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
      *
      * @param  BlockWorksheet $worksheet
