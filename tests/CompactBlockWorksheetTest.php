@@ -50,8 +50,23 @@ final class CompactBlockWorksheetTest extends TestCase
         $compact_block_worksheet = new CompactBlockWorksheet();
         $compact_block_worksheet->addBlockAsRow($dynamic_block);
 
-        $expected_coordinate_values = array('B2' => 'test');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, ['B2' => 'test'], __FUNCTION__ . '.xlsx');
+    }
+
+    /**
+     * Test that calling appendBlockAsColumn on empty worksheet is the same as calling addBlockAsRow
+     *
+     * @return void
+     */
+    public function testAppendBlockToColumnWorksOnEmptyWorksheet()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->AddCell('A1', 'block');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->appendBlockAsColumn($dynamic_block_1);
+
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, ['A1' => 'block'], __FUNCTION__ . '.xlsx');
     }
 
     /**
@@ -71,7 +86,7 @@ final class CompactBlockWorksheetTest extends TestCase
         $dynamic_block_3->addCell('A1', 'block 3');
 
         $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
+        $compact_block_worksheet->appendBlockAsColumn($dynamic_block_1)
                                 ->appendBlockAsColumn($dynamic_block_2)
                                 ->appendBlockAsColumn($dynamic_block_3);
 

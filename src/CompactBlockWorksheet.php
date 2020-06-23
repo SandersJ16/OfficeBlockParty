@@ -4,6 +4,7 @@ namespace BlockParty;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
+
 class CompactBlockWorksheet extends BlockWorksheet
 {
     /**
@@ -37,7 +38,9 @@ class CompactBlockWorksheet extends BlockWorksheet
     public function appendBlockAsColumn(Block $block)
     {
         $last_key = count($this->block_rows);
+        $last_key = $last_key ?: 1; // If $last_key is 0 then set it as 1 to append to 1st row
         $this->appendBlockToColumn($block, $last_key);
+
         return $this;
     }
 
@@ -47,11 +50,17 @@ class CompactBlockWorksheet extends BlockWorksheet
      * @param  Block $block
      * @param  int   $row_number
      *
-     * @return XlsxBlockWorksheet
+     * @return self
      */
     public function appendBlockToColumn(Block $block, int $row_number)
     {
-        $this->block_rows[$row_number - 1][] = $block;
+        --$row_number;
+        if ($row_number < 0) {
+            throw new \InvalidArgumentException('$row_number must be larger than 0');
+        } elseif ($row_number && !isset($this->block_rows[$row_number])) {
+            throw new \InvalidArgumentException("Row  ${row_number} doesn't exist");
+        }
+        $this->block_rows[$row_number][] = $block;
         $this->populateCellsFromBlocks($this->block_rows);
         return $this;
     }
