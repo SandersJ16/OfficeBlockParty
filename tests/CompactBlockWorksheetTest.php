@@ -125,6 +125,48 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
+     * Test that appendBlockToRow throws an exception when the supplied row is zero
+     *
+     * @return void
+     */
+    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowIsZero()
+    {
+        $compact_block_worksheet = new CompactBlockWorksheet();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), 0);
+    }
+
+    /**
+     * Test that appendBlockToRow throws an exception when the supplied row is a negative value
+     *
+     * @return void
+     */
+    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowIsNegativeValue()
+    {
+        $compact_block_worksheet = new CompactBlockWorksheet();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), -1);
+    }
+
+    /**
+     * Test that appendBlockToRow throws an exception when the supplied
+     * row is greater than the number of existing rows
+     *
+     * @return void
+     */
+    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowDoesNotExist()
+    {
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
+                                ->addBlockAsRow(new DynamicBlock());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), 3);
+    }
+
+    /**
      * Test that a CompactBlockWorksheet with multiple blocks added as rows and columns
      * renders correctly, also test the CompactBlockWorksheet::appendBlockToRow method
      *
