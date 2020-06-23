@@ -35,11 +35,11 @@ class CompactBlockWorksheet extends BlockWorksheet
      *
      * @return self
      */
-    public function appendBlockAsColumn(Block $block)
+    public function appendBlockToLastRow(Block $block)
     {
         $last_key = count($this->block_rows);
         $last_key = $last_key ?: 1; // If $last_key is 0 then set it as 1 to append to 1st row
-        $this->appendBlockToColumn($block, $last_key);
+        $this->appendBlockToRow($block, $last_key);
 
         return $this;
     }
@@ -52,7 +52,7 @@ class CompactBlockWorksheet extends BlockWorksheet
      *
      * @return self
      */
-    public function appendBlockToColumn(Block $block, int $row_number)
+    public function appendBlockToRow(Block $block, int $row_number)
     {
         --$row_number;
         if ($row_number < 0) {

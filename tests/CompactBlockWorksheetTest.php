@@ -54,7 +54,7 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
-     * Test that calling appendBlockAsColumn on empty worksheet is
+     * Test that calling appendBlockToLastRow on empty worksheet is
      * the same as calling addBlockAsRow on an empty worksheet
      *
      * @return void
@@ -65,7 +65,7 @@ final class CompactBlockWorksheetTest extends TestCase
         $dynamic_block_1->AddCell('A1', 'block');
 
         $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockAsColumn($dynamic_block_1);
+        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1);
 
         $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, ['A1' => 'block'], __FUNCTION__ . '.xlsx');
     }
@@ -87,9 +87,9 @@ final class CompactBlockWorksheetTest extends TestCase
         $dynamic_block_3->addCell('A1', 'block 3');
 
         $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockAsColumn($dynamic_block_1)
-                                ->appendBlockAsColumn($dynamic_block_2)
-                                ->appendBlockAsColumn($dynamic_block_3);
+        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
+                                ->appendBlockToLastRow($dynamic_block_2)
+                                ->appendBlockToLastRow($dynamic_block_3);
 
         $expected_coordinate_values = array('B2' => 'block 1',
                                             'E4' => 'block 2',
@@ -126,7 +126,7 @@ final class CompactBlockWorksheetTest extends TestCase
 
     /**
      * Test that a CompactBlockWorksheet with multiple blocks added as rows and columns
-     * renders correctly, also test the CompactBlockWorksheet::appendBlockToColumn method
+     * renders correctly, also test the CompactBlockWorksheet::appendBlockToRow method
      *
      * @return void
      */
@@ -147,8 +147,8 @@ final class CompactBlockWorksheetTest extends TestCase
         $compact_block_worksheet = new CompactBlockWorksheet();
         $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
                                 ->addBlockAsRow($dynamic_block_2)
-                                ->appendBlockToColumn($dynamic_block_3, 1)
-                                ->appendBlockToColumn($dynamic_block_4, 2);
+                                ->appendBlockToRow($dynamic_block_3, 1)
+                                ->appendBlockToRow($dynamic_block_4, 2);
 
         $expected_coordinate_values = array('B5' => 'block 1',
                                             'C9' => 'block 2',
