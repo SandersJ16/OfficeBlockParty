@@ -66,6 +66,21 @@ class CompactBlockWorksheet extends BlockWorksheet
     }
 
     /**
+     * Insert a block as a new row after an existing row
+     *
+     * @param  Block $block
+     * @param  int   $row_number
+     *
+     * @return self
+     */
+    public function insertBlockAfterRow(Block $block, $row_number)
+    {
+        $this->block_rows = $this->insertIntoArrayAfterIndex([$block], $this->block_rows, $row_number);
+        $this->populateCellsFromBlocks($this->block_rows);
+        return $this;
+    }
+
+    /**
      * Populate this worksheets cells from rows of blocks
      *
      * @param  $block_rows
@@ -96,5 +111,23 @@ class CompactBlockWorksheet extends BlockWorksheet
             }
             $vertical_translation += $row_max_cell_height;
         }
+    }
+
+    /**
+     * Insert data into an array after a specific index
+     *
+     * @param  mixed $data
+     * @param  array $array
+     * @param  int   $index
+     *
+     * @return array
+     */
+    private function insertIntoArrayAfterIndex($data, array $array, $index)
+    {
+        return array_merge(
+            array_slice($array, 0, $index),
+            array($data),
+            array_slice($array, $index, count($array) - 1)
+        );
     }
 }

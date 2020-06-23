@@ -158,6 +158,33 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
+     * Test that the CompactBlockWorksheet::insertBlockAfterRow correctly inserts row correctly
+     *
+     * @return void
+     */
+    public function testInsertBlockAfterRowRendersBlocksCorrectly()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->addCell('B2', 'block 1');
+
+        $dynamic_block_2 = new DynamicBlock();
+        $dynamic_block_2->addCell('C3', 'block 2');
+
+        $dynamic_block_3 = new DynamicBlock();
+        $dynamic_block_3->addCell('D4', 'block 3');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
+                                ->addBlockAsRow($dynamic_block_2)
+                                ->insertBlockAfterRow($dynamic_block_3, 1);
+
+        $expected_coordinate_values = array('B2' => 'block 1',
+                                            'C9' => 'block 2',
+                                            'D6' => 'block 3');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+    /**
      * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
      *
      * @param  BlockWorksheet $worksheet
