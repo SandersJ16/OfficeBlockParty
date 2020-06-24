@@ -54,13 +54,13 @@ class CompactBlockWorksheet extends BlockWorksheet
      */
     public function appendBlockToRow(Block $block, int $row_number)
     {
-        --$row_number;
-        if ($row_number < 0) {
-            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must not be negative");
-        } elseif ($row_number && !isset($this->block_rows[$row_number])) {
+        $row_index_number = $row_number -1;
+        if ($row_index_number < 0) {
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be greater than 0");
+        } elseif ($row_index_number && !isset($this->block_rows[$row_index_number])) {
             throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
         }
-        $this->block_rows[$row_number][] = $block;
+        $this->block_rows[$row_index_number][] = $block;
         $this->populateCellsFromBlocks($this->block_rows);
         return $this;
     }
@@ -115,7 +115,17 @@ class CompactBlockWorksheet extends BlockWorksheet
      */
     public function insertBlockAfterColumn(Block $block, $row_number, $column_number)
     {
-        $this->block_rows[$row_number - 1] = $this->insertIntoArrayAfterIndex($block, $this->block_rows[$row_number - 1], $column_number);
+        $row_index_number = $row_number -1;
+        if ($row_index_number < 0) {
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be greater than 0");
+        } elseif ($column_number < 0) {
+            throw new \InvalidArgumentException("Column ${column_number} invalid, supplied column must be greater than 0");
+        } elseif (!isset($this->block_rows[$row_index_number])) {
+            throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
+        } elseif ($column_number > count($this->block_rows[$row_index_number])) {
+            throw new \InvalidArgumentException("Column ${column_number} doesn't exist in row ${row_number}");
+        }
+        $this->block_rows[$row_index_number] = $this->insertIntoArrayAfterIndex($block, $this->block_rows[$row_index_number], $column_number);
         $this->populateCellsFromBlocks($this->block_rows);
         return $this;
     }
