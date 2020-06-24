@@ -56,9 +56,9 @@ class CompactBlockWorksheet extends BlockWorksheet
     {
         --$row_number;
         if ($row_number < 0) {
-            throw new \InvalidArgumentException('$row_number must be larger than 0');
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 0");
         } elseif ($row_number && !isset($this->block_rows[$row_number])) {
-            throw new \InvalidArgumentException("Row  ${row_number} doesn't exist");
+            throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
         }
         $this->block_rows[$row_number][] = $block;
         $this->populateCellsFromBlocks($this->block_rows);
@@ -75,6 +75,11 @@ class CompactBlockWorksheet extends BlockWorksheet
      */
     public function insertBlockAfterRow(Block $block, $row_number)
     {
+        if ($row_number < 0) {
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 0");
+        } elseif ($row_number > count($this->block_rows)) {
+            throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
+        }
         $this->block_rows = $this->insertIntoArrayAfterIndex([$block], $this->block_rows, $row_number);
         $this->populateCellsFromBlocks($this->block_rows);
         return $this;
