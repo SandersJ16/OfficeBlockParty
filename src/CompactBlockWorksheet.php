@@ -56,7 +56,7 @@ class CompactBlockWorksheet extends BlockWorksheet
     {
         --$row_number;
         if ($row_number < 0) {
-            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 0");
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must not be negative");
         } elseif ($row_number && !isset($this->block_rows[$row_number])) {
             throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
         }
@@ -76,7 +76,7 @@ class CompactBlockWorksheet extends BlockWorksheet
     public function insertBlockAfterRow(Block $block, $row_number)
     {
         if ($row_number < 0) {
-            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 0");
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must not be negative");
         } elseif ($row_number > count($this->block_rows)) {
             throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
         }
@@ -96,7 +96,7 @@ class CompactBlockWorksheet extends BlockWorksheet
     public function insertBlockBeforeRow(Block $block, $row_number)
     {
         if ($row_number <= 0) {
-            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 1");
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be greater than 0");
         } elseif ($row_number > count($this->block_rows)) {
             throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
         }

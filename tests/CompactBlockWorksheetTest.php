@@ -337,7 +337,7 @@ final class CompactBlockWorksheetTest extends TestCase
         $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
     }
 
-     /**
+    /**
      * Test that insertBlockBeforeRow inserts row as first row the supplied row number is one
      *
      * @return void
