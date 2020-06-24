@@ -409,6 +409,33 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
+     * Test that insertBlockAfterColumn works when inserting a block between two columns
+     *
+     * @return void
+     */
+    public function testInsertBlockAfterColumnWhenSuppliedColumnIsBetweenTwoColumns()
+    {
+        $dynamic_block_1 = new DynamicBlock();
+        $dynamic_block_1->addCell('A4', 'block 1');
+
+        $dynamic_block_2 = new DynamicBlock();
+        $dynamic_block_2->addCell('C6', 'block 2');
+
+        $dynamic_block_3 = new DynamicBlock();
+        $dynamic_block_3->addCell('B4', 'block 3');
+
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
+                                ->appendBlockToLastRow($dynamic_block_2)
+                                ->insertBlockAfterColumn($dynamic_block_3, 1, 1);
+
+        $expected_coordinate_values = array('A4' => 'block 1',
+                                            'F6' => 'block 2',
+                                            'C4' => 'block 3');
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
+    }
+
+    /**
      * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
      *
      * @param  BlockWorksheet $worksheet

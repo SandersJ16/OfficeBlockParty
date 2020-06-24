@@ -105,6 +105,22 @@ class CompactBlockWorksheet extends BlockWorksheet
     }
 
     /**
+     * Insert a block into a row after an existing column
+     *
+     * @param  Block $block
+     * @param  int   $row_number
+     * @param  int   $column_number
+     *
+     * @return XlsxBlockWorksheet
+     */
+    public function insertBlockAfterColumn(Block $block, $row_number, $column_number)
+    {
+        $this->block_rows[$row_number - 1] = $this->insertIntoArrayAfterIndex($block, $this->block_rows[$row_number - 1], $column_number);
+        $this->populateCellsFromBlocks($this->block_rows);
+        return $this;
+    }
+
+    /**
      * Populate this worksheets cells from rows of blocks
      *
      * @param  $block_rows
