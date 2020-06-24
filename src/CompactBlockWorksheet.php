@@ -86,6 +86,25 @@ class CompactBlockWorksheet extends BlockWorksheet
     }
 
     /**
+     * Insert a block as a new row before an existing row
+     *
+     * @param  Block $block
+     * @param  int   $row_number
+     *
+     * @return self
+     */
+    public function insertBlockBeforeRow(Block $block, $row_number)
+    {
+        if ($row_number <= 0) {
+            throw new \InvalidArgumentException("Row ${row_number} invalid, supplied row must be larger than 1");
+        } elseif ($row_number > count($this->block_rows)) {
+            throw new \InvalidArgumentException("Row ${row_number} doesn't exist");
+        }
+        $this->insertBlockAfterRow($block, $row_number - 1);
+        return $this;
+    }
+
+    /**
      * Populate this worksheets cells from rows of blocks
      *
      * @param  $block_rows
