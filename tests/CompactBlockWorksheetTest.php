@@ -20,56 +20,56 @@ final class CompactBlockWorksheetTest extends TestCase
     public function invalidArgumentDataProvider()
     {
         return array(
-            "Test that insertBlockBeforeColumn throws an exception when the supplied column doesn't exist" =>
-                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockBeforeColumn', [1, 3]],
-
-            "Test that insertBlockBeforeColumn throws an exception when the supplied row doesn't exist" =>
-                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeColumn', [3, 1]],
-
-            "Test that insertBlockBeforeColumn throws an exception when the supplied column is a negative value" =>
-                [[], 'insertBlockBeforeColumn', [1, -4]],
-
-            "Test that insertBlockBeforeColumn throws an exception when the supplied row is a negative value" =>
-                [[], 'insertBlockBeforeColumn', [-1, 1]],
-
-            "Test that insertBlockBeforeColumn throws an exception when the supplied column is zero" =>
-                [[], 'insertBlockBeforeColumn', [1, 0]],
-
-            "Test that insertBlockAfterColumn throws an exception when the supplied column doesn't exist" =>
-                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockAfterColumn', [1, 3]],
-
-            "Test that insertBlockAfterColumn throws an exception when the supplied row doesn't exist" =>
-                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterColumn', [3, 1]],
-
-            "Test that insertBlockAfterColumn throws an exception when the supplied column is a negative value" =>
-                [[], 'insertBlockAfterColumn', [1, -1]],
-
-            "Test that insertBlockAfterColumn throws an exception when the supplied row is a negative value" =>
-                [[], 'insertBlockAfterColumn', [-1, 1]],
-
-            "Test that insertBlockBeforeRow throws an exception when the supplied row is a greater than the number of existing rows" =>
-                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeRow', [3]],
-
-            "Test that insertBlockBeforeRow throws an exception when the supplied row is a negative value" =>
-                [[], 'insertBlockBeforeRow', [-2]],
-
-            "Test that insertBlockBeforeRow throws an exception when the supplied row is zero" =>
-                [[], 'insertBlockBeforeRow', [0]],
-
-            "Test that insertBlockAfterRow throws an exception when the supplied row is a greater than the number of existing rows" =>
-                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterRow', [3]],
-
-            "Test that insertBlockAfterRow throws an exception when the supplied row is a negative value" =>
-                [[], 'insertBlockAfterRow', [-1]],
-
-            "Test that appendBlockToRow throws an exception when the supplied row is greater than the number of existing rows" =>
-                [['addBlockAsRow', 'addBlockAsRow'], 'appendBlockToRow', [3]],
+            "Test that appendBlockToRow throws an exception when the supplied row is zero" =>
+                [[], 'appendBlockToRow', [0]],
 
             "Test that appendBlockToRow throws an exception when the supplied row is a negative value" =>
                 [[], 'appendBlockToRow', [-1]],
 
-            "Test that appendBlockToRow throws an exception when the supplied row is zero" =>
-                [[], 'appendBlockToRow', [0]]
+            "Test that appendBlockToRow throws an exception when the supplied row is greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'appendBlockToRow', [3]],
+
+            "Test that insertBlockAfterRow throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockAfterRow', [-1]],
+
+            "Test that insertBlockAfterRow throws an exception when the supplied row is a greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterRow', [3]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is zero" =>
+                [[], 'insertBlockBeforeRow', [0]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockBeforeRow', [-2]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is a greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeRow', [3]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockAfterColumn', [-1, 1]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied column is a negative value" =>
+                [[], 'insertBlockAfterColumn', [1, -1]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied row doesn't exist" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterColumn', [3, 1]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied column doesn't exist" =>
+                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockAfterColumn', [1, 3]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column is zero" =>
+                [[], 'insertBlockBeforeColumn', [1, 0]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockBeforeColumn', [-1, 1]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column is a negative value" =>
+                [[], 'insertBlockBeforeColumn', [1, -4]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied row doesn't exist" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeColumn', [3, 1]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column doesn't exist" =>
+                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockBeforeColumn', [1, 3]]
         );
     }
 
