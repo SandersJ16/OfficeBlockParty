@@ -12,6 +12,280 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 final class CompactBlockWorksheetTest extends TestCase
 {
     /**
+     * Data provider for testing invalidArgumentException when adding a block to a CompactBlockWorksheet
+     * See `testInvalidArgumentsOnBlockInsertion` for description of returned parameters
+     *
+     * @return array
+     */
+    public function invalidArgumentDataProvider()
+    {
+        return array(
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column doesn't exist" =>
+                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockBeforeColumn', [1, 3]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied row doesn't exist" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeColumn', [3, 1]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column is a negative value" =>
+                [[], 'insertBlockBeforeColumn', [1, -4]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockBeforeColumn', [-1, 1]],
+
+            "Test that insertBlockBeforeColumn throws an exception when the supplied column is zero" =>
+                [[], 'insertBlockBeforeColumn', [1, 0]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied column doesn't exist" =>
+                [['appendBlockToLastRow', 'appendBlockToLastRow'], 'insertBlockAfterColumn', [1, 3]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied row doesn't exist" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterColumn', [3, 1]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied column is a negative value" =>
+                [[], 'insertBlockAfterColumn', [1, -1]],
+
+            "Test that insertBlockAfterColumn throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockAfterColumn', [-1, 1]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is a greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockBeforeRow', [3]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockBeforeRow', [-2]],
+
+            "Test that insertBlockBeforeRow throws an exception when the supplied row is zero" =>
+                [[], 'insertBlockBeforeRow', [0]],
+
+            "Test that insertBlockAfterRow throws an exception when the supplied row is a greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'insertBlockAfterRow', [3]],
+
+            "Test that insertBlockAfterRow throws an exception when the supplied row is a negative value" =>
+                [[], 'insertBlockAfterRow', [-1]],
+
+            "Test that appendBlockToRow throws an exception when the supplied row is greater than the number of existing rows" =>
+                [['addBlockAsRow', 'addBlockAsRow'], 'appendBlockToRow', [3]],
+
+            "Test that appendBlockToRow throws an exception when the supplied row is a negative value" =>
+                [[], 'appendBlockToRow', [-1]],
+
+            "Test that appendBlockToRow throws an exception when the supplied row is zero" =>
+                [[], 'appendBlockToRow', [0]]
+        );
+    }
+
+    /**
+     * Test that adding blocks to a CompactBlockWorksheet throws
+     * an InvalidArgumentException when supplied invalid parameters
+     *
+     * @dataProvider invalidArgumentDataProvider
+     *
+     * @param  array $pre_add_block_methods   An array of CompactBlockWorksheet methods used to add
+     *                                            empty Dynamic blocks to it prior to expecting failure
+     * @param  array $failure_method          Method to call with expected failure
+     * @param  array $extra_args              Extra arguments to pass to $failure_method
+     *
+     * @return void
+     */
+    public function testInvalidArgumentsOnBlockInsertion($pre_add_block_methods, $failure_method, $extra_args)
+    {
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        foreach ($pre_add_block_methods as $block_method) {
+            $compact_block_worksheet->$block_method(new DynamicBlock());
+        }
+        $this->expectException(\InvalidArgumentException::class);
+        $compact_block_worksheet->$failure_method(new DynamicBlock(), ...$extra_args);
+    }
+
+    /**
+     * Data Provider for testing inserting blocks into a CompactBlockWorksheet.
+     * See `testWorksheetBlockInsertionMethods` for descritption of returned parameter
+     *
+     * @return array
+     */
+    public function blockWorksheetInsertionDataProvider()
+    {
+        return array(
+            'Test that an empty CompactBlockWorksheet produces correct output' =>
+                array(
+                    'testSpreadsheetWithEmptyCompactBlockWorksheet',
+                    array()
+                ),
+            'Test that a CompactBlockWorksheet with a single block produces correct output' =>
+                array(
+                    'testSpreadsheetWithSingleCompactBlockWorksheet',
+                    array(
+                        ['B2', 'B2', 'addBlockAsRow', []]
+                    )
+                ),
+            'Test that calling appendBlockToLastRow on empty worksheet is the same as calling addBlockAsRow on an empty worksheet' =>
+                array(
+                    'testAppendBlockAsColumnWorksOnEmptyCompactBlockWorksheet',
+                    array(
+                        ['A1', 'A1', 'appendBlockToLastRow', []]
+                    )
+                ),
+            'Test that a CompactBlockWorksheet with multiple blocks added to same row renders correctly' =>
+                array(
+                    'testSpreadsheetWithMultipleBlocksInSingleRowOnCompactBlockWorksheet',
+                    array(
+                        ['B2', 'B2', 'appendBlockToLastRow', []],
+                        ['C4', 'E4', 'appendBlockToLastRow', []],
+                        ['A1', 'F1', 'appendBlockToLastRow', []]
+                    )
+                ),
+            'Test that a CompactBlockWorksheet with multiple blocks added as separate rows renders correctly' =>
+                array(
+                    'testSpreadsheetWithMultipleBlocksInSingleColumnOnCompactBlockWorksheet',
+                    array(
+                        ['B5', 'B5', 'addBlockAsRow', []],
+                        ['C4', 'C9', 'addBlockAsRow', []],
+                        ['A3', 'A12', 'addBlockAsRow', []]
+                    )
+                ),
+            'Test that a CompactBlockWorksheet with multiple blocks added as rows and columns renders correctly, also test the CompactBlockWorksheet::appendBlockToRow method' =>
+                array(
+                    'testSpreadsheetWithMultipleRowsAndColumnsOnCompactBlockWorksheet',
+                    array(
+                        ['B5', 'B5', 'addBlockAsRow', []],
+                        ['C4', 'C9', 'addBlockAsRow', []],
+                        ['A3', 'C3', 'appendBlockToRow', [1]],
+                        ['D2', 'G7', 'appendBlockToRow', [2]]
+                    )
+                ),
+            'Test that the CompactBlockWorksheet::insertBlockAfterRow inserts row correctly' =>
+                array(
+                    'testInsertBlockAfterRowWhenSuppliedRowIsBetweenTwoRows',
+                    array(
+                        ['B2', 'B2', 'addBlockAsRow', []],
+                        ['C3', 'C9', 'addBlockAsRow', []],
+                        ['D4', 'D6', 'insertBlockAfterRow', [1]]
+                    )
+                ),
+            'Test that insertBlockAfterRow inserts row as first row the supplied row number is zero' =>
+                array(
+                    'testInserBlockAfterRowWhenSuppliedRowIsZero',
+                    array(
+                        ['C1', 'C5', 'addBlockAsRow', []],
+                        ['E3', 'E8', 'addBlockAsRow', []],
+                        ['B4', 'B4', 'insertBlockAfterRow', [0]]
+                    )
+                ),
+            'Test that insertBlockAfterRow inserts row as first row the supplied row number is last row number' =>
+                array(
+                    'testInsertBlockAfterRowWhenSuppliedRowIsLastRow',
+                    array(
+                        ['E9', 'E9', 'addBlockAsRow', []],
+                        ['D4', 'D13', 'addBlockAsRow', []],
+                        ['C7', 'C20', 'insertBlockAfterRow', [2]]
+                    )
+                ),
+            'Test that the CompactBlockWorksheet::insertBlockBeforeRow inserts row correctly' =>
+                array(
+                    'testInsertBlockBeforeRowWhenSuppliedRowIsBetweenTwoRows',
+                    array(
+                        ['B2', 'B2', 'addBlockAsRow', []],
+                        ['C3', 'C9', 'addBlockAsRow', []],
+                        ['D4', 'D6', 'insertBlockBeforeRow', [2]]
+                    )
+                ),
+            'Test that insertBlockBeforeRow inserts row as first row the supplied row number is one' =>
+                array(
+                    'testInsertBlockBeforeRowWhenSuppliedRowIsOne',
+                    array(
+                        ['C1', 'C5', 'addBlockAsRow', []],
+                        ['E3', 'E8', 'addBlockAsRow', []],
+                        ['B4', 'B4', 'insertBlockBeforeRow', [1]]
+                    )
+                ),
+            'Test that insertBlockAfterColumn works when inserting a block between two columns' =>
+                array(
+                    'testInsertBlockAfterColumnWhenSuppliedColumnIsBetweenTwoColumns',
+                    array(
+                        ['A4', 'A4', 'appendBlockToLastRow', []],
+                        ['C6', 'F6', 'appendBlockToLastRow', []],
+                        ['B4', 'C4', 'insertBlockAfterColumn', [1, 1]]
+                    )
+                ),
+            'Test that insertBlockAfterColumn adds block as first block in row when column number is zero' =>
+                array(
+                    'testInsertBlockAfterColumnWhenSuppliedColumnNumberIsZero',
+                    array(
+                        ['F7', 'H7', 'appendBlockToLastRow', []],
+                        ['D12', 'L12', 'appendBlockToLastRow', []],
+                        ['B8', 'B8', 'insertBlockAfterColumn', [1, 0]]
+                    )
+                ),
+            'Test that insertBlockAfterColumn adds block as last block in row when column number is the last column' =>
+                array(
+                    'testInsertBlockAfterColumnWhenSuppliedColumnNumberIsLastColumn',
+                    array(
+                        ['C2', 'C2', 'appendBlockToLastRow', []],
+                        ['A4', 'D4', 'appendBlockToLastRow', []],
+                        ['C1', 'G1', 'insertBlockAfterColumn', [1, 2]]
+                    )
+                ),
+            'Test that insertBlockBeforeColumn works when inserting a block between two columns' =>
+                array(
+                    'testInsertBlockBeforeColumnWhenSuppliedColumnIsBetweenTwoColumns',
+                    array(
+                        ['A4', 'A4', 'appendBlockToLastRow', []],
+                        ['C6', 'F6', 'appendBlockToLastRow', []],
+                        ['B4', 'C4', 'insertBlockBeforeColumn', [1, 2]]
+                    )
+                ),
+            'Test that insertBlockBeforeColumn adds block as first block in row when column number is one' =>
+                array(
+                    'testInsertBlockBeforeColumnWhenSuppliedColumnNumberIsOne',
+                    array(
+                        ['G6', 'H6', 'appendBlockToLastRow', []],
+                        ['B2', 'J2', 'appendBlockToLastRow', []],
+                        ['A2', 'A2', 'insertBlockBeforeColumn', [1, 1]]
+                    )
+                ),
+        );
+    }
+
+    /**
+     * Test creating dynamic blocks and adding them to worksheets.
+     * This test will
+     * - create a set of blocks
+     * - add them to a CompactBlockWorksheet and Spreedsheet
+     * - write the Spreedsheet to disk
+     * - read the Spreadsheet back into memory
+     * - test that all cells are populated with the expected results
+     *
+     * @dataProvider blockWorksheetInsertionDataProvider
+     *
+     * @param  string $file_name    Filename to save the worksheet as
+     * @param  array  $cell_mapping An array of arrays where each array represents a block and has four parameters:
+     *     [
+     *       $insert_coordinate   - A unique value will be inserted into this block at this coordinate
+     *       $expected_coordinate - The expected location on the final Spreedsheet that should correspond with the unique value
+     *       $block_method        - The method that should be used to add the block to the CompactBlockWhorksheet
+     *       $extra_parameters    - Extra paramters to pass to the $block_method
+     *     ]
+     *
+     * @return void
+     */
+    public function testWorksheetBlockInsertionMethods($file_name, $cell_mapping)
+    {
+        $compact_block_worksheet = new CompactBlockWorksheet();
+        $count = 0;
+        $expected_coordinate_values = array();
+        foreach ($cell_mapping as list($insert_coordinate, $expected_coordinate, $block_method, $extra_parameters)) {
+            ++$count;
+            $value = "block ${count}";
+            $dynamic_block = new DynamicBlock();
+            $dynamic_block->addCell($insert_coordinate, $value);
+
+            $compact_block_worksheet->$block_method($dynamic_block, ...$extra_parameters);
+
+            $expected_coordinate_values[$expected_coordinate] = $value;
+        }
+        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, $file_name . '.xlsx');
+    }
+
+    /**
      * Get temporary file location for test
      *
      * @return string
@@ -23,649 +297,6 @@ final class CompactBlockWorksheetTest extends TestCase
             mkdir($temp_dir);
         }
         return $temp_dir;
-    }
-
-    /**
-     * Test that an empty CompactBlockWorksheet produces correct output
-     *
-     * @return void
-     */
-    public function testSpreadsheetWithEmptyCompactBlockWorksheet()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $expected_coordinate_values = array();
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that a CompactBlockWorksheet with a single block produces correct output
-     *
-     * @return void
-     */
-    public function testSpreadsheetWithSingleCompactBlockWorksheet()
-    {
-        $dynamic_block = new DynamicBlock();
-        $dynamic_block->addCell('B2', 'test');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block);
-
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, ['B2' => 'test'], __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that calling appendBlockToLastRow on empty worksheet is
-     * the same as calling addBlockAsRow on an empty worksheet
-     *
-     * @return void
-     */
-    public function testAppendBlockAsColumnWorksOnEmptyCompactBlockWorksheet()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->AddCell('A1', 'block');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1);
-
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, ['A1' => 'block'], __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that a CompactBlockWorksheet with multiple blocks added to same row renders correctly
-     *
-     * @return void
-     */
-    public function testSpreadsheetWithMultipleBlocksInSingleRowOnCompactBlockWorksheet()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('B2', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C4', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('A1', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->appendBlockToLastRow($dynamic_block_3);
-
-        $expected_coordinate_values = array('B2' => 'block 1',
-                                            'E4' => 'block 2',
-                                            'F1' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that a CompactBlockWorksheet with multiple blocks added as separate rows renders correctly
-     *
-     * @return void
-     */
-    public function testSpreadsheetWithMultipleBlocksInSingleColumnOnCompactBlockWorksheet()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('B5', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C4', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('A3', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->addBlockAsRow($dynamic_block_3);
-
-        $expected_coordinate_values = array('B5' => 'block 1',
-                                            'C9' => 'block 2',
-                                            'A12' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that appendBlockToRow throws an exception when the supplied row is zero
-     *
-     * @return void
-     */
-    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowIsZero()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), 0);
-    }
-
-    /**
-     * Test that appendBlockToRow throws an exception when the supplied row is a negative value
-     *
-     * @return void
-     */
-    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowIsNegativeValue()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), -1);
-    }
-
-    /**
-     * Test that appendBlockToRow throws an exception when the supplied
-     * row is greater than the number of existing rows
-     *
-     * @return void
-     */
-    public function testAppendBlockToRowThrowsExceptionWhenSuppliedRowDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
-                                ->addBlockAsRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->appendBlockToRow(new DynamicBlock(), 3);
-    }
-
-    /**
-     * Test that a CompactBlockWorksheet with multiple blocks added as rows and columns
-     * renders correctly, also test the CompactBlockWorksheet::appendBlockToRow method
-     *
-     * @return void
-     */
-    public function testSpreadsheetWithMultipleRowsAndColumnsOnCompactBlockWorksheet()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('B5', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C4', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('A3', 'block 3');
-
-        $dynamic_block_4 = new DynamicBlock();
-        $dynamic_block_4->addCell('D2', 'block 4');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->appendBlockToRow($dynamic_block_3, 1)
-                                ->appendBlockToRow($dynamic_block_4, 2);
-
-        $expected_coordinate_values = array('B5' => 'block 1',
-                                            'C9' => 'block 2',
-                                            'C3' => 'block 3',
-                                            'G7' => 'block 4');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that the CompactBlockWorksheet::insertBlockAfterRow inserts row correctly
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterRowWhenSuppliedRowIsBetweenTwoRows()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('B2', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C3', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('D4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->insertBlockAfterRow($dynamic_block_3, 1);
-
-        $expected_coordinate_values = array('B2' => 'block 1',
-                                            'C9' => 'block 2',
-                                            'D6' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-     /**
-     * Test that insertBlockAfterRow inserts row as first row the supplied row number is zero
-     *
-     * @return void
-     */
-    public function testInserBlockAfterRowWhenSuppliedRowIsZero()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('C1', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('E3', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('B4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->insertBlockAfterRow($dynamic_block_3, 0);
-
-        $expected_coordinate_values = array('C5' => 'block 1',
-                                            'E8' => 'block 2',
-                                            'B4' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockAfterRow inserts row as first row the supplied row number is last row number
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterRowWhenSuppliedRowIsLastRow()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('E9', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('D4', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('C7', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->insertBlockAfterRow($dynamic_block_3, 2);
-
-        $expected_coordinate_values = array('E9' => 'block 1',
-                                            'D13' => 'block 2',
-                                            'C20' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockAfterRow throws an exception when the supplied
-     * row is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterRowThrowsExceptionWhenSuppliedRowIsNegativeValue()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterRow(new DynamicBlock(), -1);
-    }
-
-    /**
-     * Test that insertBlockAfterRow throws an exception when the supplied
-     * row is a greater than the number of existing rows
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterRowThrowsExceptionWhenSuppliedRowDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
-                                ->addBlockAsRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterRow(new DynamicBlock(), 3);
-    }
-
-    /**
-     * Test that the CompactBlockWorksheet::insertBlockBeforeRow inserts row correctly
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeRowWhenSuppliedRowIsBetweenTwoRows()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('B2', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C3', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('D4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->insertBlockBeforeRow($dynamic_block_3, 2);
-
-        $expected_coordinate_values = array('B2' => 'block 1',
-                                            'C9' => 'block 2',
-                                            'D6' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockBeforeRow inserts row as first row the supplied row number is one
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeRowWhenSuppliedRowIsOne()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('C1', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('E3', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('B4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow($dynamic_block_1)
-                                ->addBlockAsRow($dynamic_block_2)
-                                ->insertBlockBeforeRow($dynamic_block_3, 1);
-
-        $expected_coordinate_values = array('C5' => 'block 1',
-                                            'E8' => 'block 2',
-                                            'B4' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockBeforeRow throws an exception when the supplied
-     * row is zero
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforrRowThrowsExceptionWhenSuppliedRowIsZero()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeRow(new DynamicBlock(), 0);
-    }
-
-    /**
-     * Test that insertBlockBeforeRow throws an exception when the supplied
-     * row is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeRowThrowsExceptionWhenSuppliedRowIsNegativeValue()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeRow(new DynamicBlock(), -2);
-    }
-
-    /**
-     * Test that insertBlockBeforeRow throws an exception when the supplied
-     * row is a greater than the number of existing rows
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeRowThrowsExceptionWhenSuppliedRowDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
-                                ->addBlockAsRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeRow(new DynamicBlock(), 3);
-    }
-
-    /**
-     * Test that insertBlockAfterColumn works when inserting a block between two columns
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnWhenSuppliedColumnIsBetweenTwoColumns()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('A4', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C6', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('B4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->insertBlockAfterColumn($dynamic_block_3, 1, 1);
-
-        $expected_coordinate_values = array('A4' => 'block 1',
-                                            'F6' => 'block 2',
-                                            'C4' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockAfterColumn adds block as first block in row when column number is zero
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnWhenSuppliedColumnNumberIsZero()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('F7', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('D12', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('B8', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->insertBlockAfterColumn($dynamic_block_3, 1, 0);
-
-        $expected_coordinate_values = array('H7' => 'block 1',
-                                            'L12' => 'block 2',
-                                            'B8' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockAfterColumn adds block as last block in row when column number is the last column
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnWhenSuppliedColumnNumberIsLastColumn()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('C2', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('A4', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('C1', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->insertBlockAfterColumn($dynamic_block_3, 1, 2);
-
-        $expected_coordinate_values = array('C2' => 'block 1',
-                                            'D4' => 'block 2',
-                                            'G1' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockAfterColumn throws an exception when the supplied row is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnThrowsExceptionWhenSuppliedRowIsNegative()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterColumn(new DynamicBlock(), -1, 1);
-    }
-
-    /**
-     * Test that insertBlockAfterColumn throws an exception when the supplied column is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnThrowsExceptionWhenSuppliedColumnisNegative()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterColumn(new DynamicBlock(), 1, -1);
-    }
-
-    /**
-     * Test that insertBlockAfterColumn throws an exception when the supplied row doesn't exist
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnThrowsExceptionWhenSuppliedRowDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
-                                ->addBlockAsRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterColumn(new DynamicBlock(), 3, 1);
-    }
-
-    /**
-     * Test that insertBlockAfterColumn throws an exception when the supplied column doesn't exist
-     *
-     * @return void
-     */
-    public function testInsertBlockAfterColumnThrowsExceptionWhenSuppliedColumnDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow(new DynamicBlock())
-                                ->appendBlockToLastRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockAfterColumn(new DynamicBlock(), 1, 3);
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn works when inserting a block between two columns
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnWhenSuppliedColumnIsBetweenTwoColumns()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('A4', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('C6', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('B4', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->insertBlockBeforeColumn($dynamic_block_3, 1, 2);
-
-        $expected_coordinate_values = array('A4' => 'block 1',
-                                            'F6' => 'block 2',
-                                            'C4' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn adds block as first block in row when column number is One
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnWhenSuppliedColumnNumberIsOne()
-    {
-        $dynamic_block_1 = new DynamicBlock();
-        $dynamic_block_1->addCell('G6', 'block 1');
-
-        $dynamic_block_2 = new DynamicBlock();
-        $dynamic_block_2->addCell('B2', 'block 2');
-
-        $dynamic_block_3 = new DynamicBlock();
-        $dynamic_block_3->addCell('A2', 'block 3');
-
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow($dynamic_block_1)
-                                ->appendBlockToLastRow($dynamic_block_2)
-                                ->insertBlockBeforeColumn($dynamic_block_3, 1, 1);
-
-        $expected_coordinate_values = array('H6' => 'block 1',
-                                            'J2' => 'block 2',
-                                            'A2' => 'block 3');
-        $this->assertBlockWorksheetProducesExepectedResults($compact_block_worksheet, $expected_coordinate_values, __FUNCTION__ . '.xlsx');
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn throws an exception when the supplied column is zero
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnThrowsExceptionWhenSuppliedColumnIsZero()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeColumn(new DynamicBlock(), 1, 0);
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn throws an exception when the supplied row is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnThrowsExceptionWhenSuppliedRowIsNegative()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeColumn(new DynamicBlock(), -1, 1);
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn throws an exception when the supplied column is a negative value
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnThrowsExceptionWhenSuppliedColumnisNegative()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeColumn(new DynamicBlock(), 1, -4);
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn throws an exception when the supplied row doesn't exist
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnThrowsExceptionWhenSuppliedRowDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->addBlockAsRow(new DynamicBlock())
-                                ->addBlockAsRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeColumn(new DynamicBlock(), 3, 1);
-    }
-
-    /**
-     * Test that insertBlockBeforeColumn throws an exception when the supplied column doesn't exist
-     *
-     * @return void
-     */
-    public function testInsertBlockBeforeColumnThrowsExceptionWhenSuppliedColumnDoesNotExist()
-    {
-        $compact_block_worksheet = new CompactBlockWorksheet();
-        $compact_block_worksheet->appendBlockToLastRow(new DynamicBlock())
-                                ->appendBlockToLastRow(new DynamicBlock());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $compact_block_worksheet->insertBlockBeforeColumn(new DynamicBlock(), 1, 3);
     }
 
     /**
