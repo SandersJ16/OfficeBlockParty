@@ -5,7 +5,7 @@ namespace OfficeBlockParty;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 
-class CompactBlockWorksheet extends BlockWorksheet
+class CompactGridBlockWorksheet extends BlockWorksheet
 {
     /**
      * Rows of blocks to be applied to the worksheet

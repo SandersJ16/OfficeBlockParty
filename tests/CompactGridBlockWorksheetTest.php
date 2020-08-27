@@ -3,16 +3,16 @@
 namespace OfficeBlockParty\Test;
 
 use OfficeBlockParty\DynamicBlock;
-use OfficeBlockParty\CompactBlockWorksheet;
+use OfficeBlockParty\CompactGridBlockWorksheet;
 use PHPUnit\Framework\TestCase;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 
-final class CompactBlockWorksheetTest extends TestCase
+final class CompactGridBlockWorksheetTest extends TestCase
 {
     /**
-     * Data provider for testing invalidArgumentException when adding a block to a CompactBlockWorksheet
+     * Data provider for testing invalidArgumentException when adding a block to a CompactGridBlockWorksheet
      * See `testInvalidArgumentsOnBlockInsertion` for description of returned parameters
      *
      * @return array
@@ -74,12 +74,12 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
-     * Test that adding blocks to a CompactBlockWorksheet throws
+     * Test that adding blocks to a CompactGridBlockWorksheet throws
      * an InvalidArgumentException when supplied invalid parameters
      *
      * @dataProvider invalidArgumentDataProvider
      *
-     * @param  array $pre_add_block_methods   An array of CompactBlockWorksheet methods used to add
+     * @param  array $pre_add_block_methods   An array of CompactGridBlockWorksheet methods used to add
      *                                            empty Dynamic blocks to it prior to expecting failure
      * @param  array $failure_method          Method to call with expected failure
      * @param  array $extra_args              Extra arguments to pass to $failure_method
@@ -88,7 +88,7 @@ final class CompactBlockWorksheetTest extends TestCase
      */
     public function testInvalidArgumentsOnBlockInsertion($pre_add_block_methods, $failure_method, $extra_args)
     {
-        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet = new CompactGridBlockWorksheet();
         foreach ($pre_add_block_methods as $block_method) {
             $compact_block_worksheet->$block_method(new DynamicBlock());
         }
@@ -97,7 +97,7 @@ final class CompactBlockWorksheetTest extends TestCase
     }
 
     /**
-     * Data Provider for testing inserting blocks into a CompactBlockWorksheet.
+     * Data Provider for testing inserting blocks into a CompactGridBlockWorksheet.
      * See `testWorksheetBlockInsertionMethods` for descritption of returned parameter
      *
      * @return array
@@ -105,12 +105,12 @@ final class CompactBlockWorksheetTest extends TestCase
     public function blockWorksheetInsertionDataProvider()
     {
         return array(
-            'Test that an empty CompactBlockWorksheet produces correct output' =>
+            'Test that an empty CompactGridBlockWorksheet produces correct output' =>
                 array(
                     'testSpreadsheetWithEmptyCompactBlockWorksheet',
                     array()
                 ),
-            'Test that a CompactBlockWorksheet with a single block produces correct output' =>
+            'Test that a CompactGridBlockWorksheet with a single block produces correct output' =>
                 array(
                     'testSpreadsheetWithSingleCompactBlockWorksheet',
                     array(
@@ -124,7 +124,7 @@ final class CompactBlockWorksheetTest extends TestCase
                         ['A1', 'A1', 'appendBlockToLastRow', []]
                     )
                 ),
-            'Test that a CompactBlockWorksheet with multiple blocks added to same row renders correctly' =>
+            'Test that a CompactGridBlockWorksheet with multiple blocks added to same row renders correctly' =>
                 array(
                     'testSpreadsheetWithMultipleBlocksInSingleRowOnCompactBlockWorksheet',
                     array(
@@ -133,7 +133,7 @@ final class CompactBlockWorksheetTest extends TestCase
                         ['A1', 'F1', 'appendBlockToLastRow', []]
                     )
                 ),
-            'Test that a CompactBlockWorksheet with multiple blocks added as separate rows renders correctly' =>
+            'Test that a CompactGridBlockWorksheet with multiple blocks added as separate rows renders correctly' =>
                 array(
                     'testSpreadsheetWithMultipleBlocksInSingleColumnOnCompactBlockWorksheet',
                     array(
@@ -142,7 +142,7 @@ final class CompactBlockWorksheetTest extends TestCase
                         ['A3', 'A12', 'addBlockAsRow', []]
                     )
                 ),
-            'Test that a CompactBlockWorksheet with multiple blocks added as rows and columns renders correctly, also test the CompactBlockWorksheet::appendBlockToRow method' =>
+            'Test that a CompactGridBlockWorksheet with multiple blocks added as rows and columns renders correctly, also test the CompactGridBlockWorksheet::appendBlockToRow method' =>
                 array(
                     'testSpreadsheetWithMultipleRowsAndColumnsOnCompactBlockWorksheet',
                     array(
@@ -152,7 +152,7 @@ final class CompactBlockWorksheetTest extends TestCase
                         ['D2', 'G7', 'appendBlockToRow', [2]]
                     )
                 ),
-            'Test that the CompactBlockWorksheet::insertBlockAfterRow inserts row correctly' =>
+            'Test that the CompactGridBlockWorksheet::insertBlockAfterRow inserts row correctly' =>
                 array(
                     'testInsertBlockAfterRowWhenSuppliedRowIsBetweenTwoRows',
                     array(
@@ -179,7 +179,7 @@ final class CompactBlockWorksheetTest extends TestCase
                         ['C7', 'C20', 'insertBlockAfterRow', [2]]
                     )
                 ),
-            'Test that the CompactBlockWorksheet::insertBlockBeforeRow inserts row correctly' =>
+            'Test that the CompactGridBlockWorksheet::insertBlockBeforeRow inserts row correctly' =>
                 array(
                     'testInsertBlockBeforeRowWhenSuppliedRowIsBetweenTwoRows',
                     array(
@@ -249,7 +249,7 @@ final class CompactBlockWorksheetTest extends TestCase
      * Test creating dynamic blocks and adding them to worksheets.
      * This test will
      * - create a set of blocks
-     * - add them to a CompactBlockWorksheet and Spreedsheet
+     * - add them to a CompactGridBlockWorksheet and Spreedsheet
      * - write the Spreedsheet to disk
      * - read the Spreadsheet back into memory
      * - test that all cells are populated with the expected results
@@ -261,7 +261,7 @@ final class CompactBlockWorksheetTest extends TestCase
      *     [
      *       $insert_coordinate   - A unique value will be inserted into this block at this coordinate
      *       $expected_coordinate - The expected location on the final Spreedsheet that should correspond with the unique value
-     *       $block_method        - The method that should be used to add the block to the CompactBlockWorksheet
+     *       $block_method        - The method that should be used to add the block to the CompactGridBlockWorksheet
      *       $extra_parameters    - Extra parameters to pass to the $block_method
      *     ]
      *
@@ -269,7 +269,7 @@ final class CompactBlockWorksheetTest extends TestCase
      */
     public function testWorksheetBlockInsertionMethods($file_name, $cell_mapping)
     {
-        $compact_block_worksheet = new CompactBlockWorksheet();
+        $compact_block_worksheet = new CompactGridBlockWorksheet();
         $count = 0;
         $expected_coordinate_values = array();
         foreach ($cell_mapping as list($insert_coordinate, $expected_coordinate, $block_method, $extra_parameters)) {
