@@ -261,8 +261,8 @@ final class CompactBlockWorksheetTest extends TestCase
      *     [
      *       $insert_coordinate   - A unique value will be inserted into this block at this coordinate
      *       $expected_coordinate - The expected location on the final Spreedsheet that should correspond with the unique value
-     *       $block_method        - The method that should be used to add the block to the CompactBlockWhorksheet
-     *       $extra_parameters    - Extra paramters to pass to the $block_method
+     *       $block_method        - The method that should be used to add the block to the CompactBlockWorksheet
+     *       $extra_parameters    - Extra parameters to pass to the $block_method
      *     ]
      *
      * @return void
@@ -328,7 +328,8 @@ final class CompactBlockWorksheetTest extends TestCase
         $missing_cells = array();
         $wrong_value_cells = array();
         $extra_coordinates = array();
-        // Check that all corrdinates match our expected values
+
+        // Check that all coordinates match our expected values
         foreach ($expected_coordinate_values as $coordinate => $expected_value) {
             if (!$rendered_cells->has($coordinate)) {
                 $missing_cells[$coordinate] = $expected_value;
@@ -336,6 +337,7 @@ final class CompactBlockWorksheetTest extends TestCase
                 $wrong_value_cells[$coordinate] = ['expected' => $expected_value, 'actual' => $actual_value];
             }
         }
+
         // Check if there are any unexpected coordinates
         foreach (array_diff($rendered_cells->getCoordinates(), array_keys($expected_coordinate_values)) as $extra_coordinate) {
             $extra_coordinates[$extra_coordinate] = $rendered_cells->get($extra_coordinate)->getValue();
@@ -358,6 +360,7 @@ final class CompactBlockWorksheetTest extends TestCase
             $error_message .= "Failed XLSX file viewable at: '${file_location}'";
             $this->fail($error_message);
         }
+
         unlink($file_location);
         $this->assertTrue(true);
     }
