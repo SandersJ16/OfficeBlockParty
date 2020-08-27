@@ -2,7 +2,7 @@
 
 namespace OfficeBlockParty\Exceptions;
 
-interface BlockPartyExceptionInterface
+interface OfficeBlockPartyExceptionInterface
 {
 
 }

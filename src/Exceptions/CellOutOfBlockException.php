@@ -2,7 +2,7 @@
 
 namespace OfficeBlockParty\Exceptions;
 
-class CellOutOfBlockException extends \OutOfBoundsException implements BlockPartyExceptionInterface
+class CellOutOfBlockException extends \OutOfBoundsException implements OfficeBlockPartyExceptionInterface
 {
 
 }
