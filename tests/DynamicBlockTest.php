@@ -1,12 +1,12 @@
 <?php
 
-namespace BlockParty\Test;
+namespace OfficeBlockParty\Test;
 
-use BlockParty\DynamicBlock;
+use OfficeBlockParty\DynamicBlock;
 use PHPUnit\Framework\TestCase;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use BlockParty\Exceptions\CellOutOfBlockException;
+use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 
 final class DynamicBlockTest extends TestCase
 {

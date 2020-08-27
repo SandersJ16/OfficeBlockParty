@@ -1,6 +1,6 @@
 <?php
 
-namespace BlockParty\Exceptions;
+namespace OfficeBlockParty\Exceptions;
 
 interface BlockPartyExceptionInterface
 {

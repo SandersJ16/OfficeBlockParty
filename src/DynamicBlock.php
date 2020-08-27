@@ -1,6 +1,6 @@
 <?php
 
-namespace BlockParty;
+namespace OfficeBlockParty;
 
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Collection\CellsFactory;
 
-use BlockParty\Exceptions\CellOutOfBlockException;
+use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 
 class DynamicBlock implements Block
 {

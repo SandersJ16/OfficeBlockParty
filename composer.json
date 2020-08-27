@@ -1,5 +1,5 @@
 {
-    "name": "sandersj16/blockparty",
+    "name": "sandersj16/officeblockparty",
     "description": "PHPOffice/PHPSpreadSheet extension for supporting Cell Blocks",
     "authors": [
         {
@@ -9,7 +9,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "BlockParty\\": "src/"
+            "OfficeBlockParty\\": "src/"
         }
     },
     "require": {
@@ -18,7 +18,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "BlockParty\\Test\\": "tests/"
+            "OfficeBlockParty\\Test\\": "tests/"
         }
     },
     "require-dev": {

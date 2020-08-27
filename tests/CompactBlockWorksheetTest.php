@@ -1,9 +1,9 @@
 <?php
 
-namespace BlockParty\Test;
+namespace OfficeBlockParty\Test;
 
-use BlockParty\DynamicBlock;
-use BlockParty\CompactBlockWorksheet;
+use OfficeBlockParty\DynamicBlock;
+use OfficeBlockParty\CompactBlockWorksheet;
 use PHPUnit\Framework\TestCase;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;

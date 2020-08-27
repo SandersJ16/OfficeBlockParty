@@ -1,6 +1,6 @@
 <?php
 
-namespace BlockParty;
+namespace OfficeBlockParty;
 
 use PhpOffice\Spreadsheet;
 
