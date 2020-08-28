@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 
-final class DynamicBlockTest extends TestCase
+final class DynamicBlockTest extends OfficeBlockPartyTestCase
 {
     /**
      * Test the DynamicBlock::getHeight function when no cells have been added
