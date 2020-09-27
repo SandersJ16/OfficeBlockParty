@@ -118,42 +118,37 @@ class DynamicBlock implements Block
     /**
      * Gets the rightmost column of the block
      *
-     * @return ?string Returns null if there are no cells in the block
+     * @param  ?int $row Return the rightmost column for the specified row,
+     *                   or the rightmost column of any row if no row number is passed
+     *
+     * @return string
      */
-    public function getHighestColumn(...$parameters)
+    public function getHighestColumn($row = null)
     {
-        $worksheet_method = __FUNCTION__;
-        return $this->internal_worksheet->$worksheet_method(...$parameters);
+        if ($row > $this->getHeight()) {
+            throw new CellOutOfBlockException(sprintf("The specified row '%i' is out of range of the block", $row));
+        }
+        return $this->internal_worksheet->getHighestColumn($row);
     }
 
     /**
-     * Set a cell value.
+     * Set the value of a cell inside the block. If the coordinate specified exists
+     * outside of the block, the blocks size will grow to accommodate the new cell
      *
-     * @param  string $pCoordinate Coordinate of the cell, eg: 'A1'
-     * @param  mixed  $pValue      Value of the cell
-     *
-     * @return self
-     */
-    public function setCellValue(...$parameters)
-    {
-        $worksheet_method = __FUNCTION__;
-        $this->internal_worksheet->$worksheet_method(...$parameters);
-        return $this;
-    }
-
-    /**
-     * Set a cell value.
-     *
-     * @param  string $pCoordinate Coordinate of the cell, eg: 'A1'
-     * @param  mixed  $pValue      Value of the cell
-     * @param  string $pDataType   Explicit data type, see DataType::TYPE_*
+     * @param  string  $coordinate
+     * @param  mixed   $value
+     * @param  ?string $data_type  The data type of the new cell
+     *                             (see DataType class constants for valid values)
      *
      * @return self
      */
-    public function setCellValueExplicit(...$parameters)
+    public function setCellValue($coordinate, $value, $data_type = null)
     {
-        $worksheet_method = __FUNCTION__;
-        $this->internal_worksheet->$worksheet_method(...$parameters);
+        if ($data_type) {
+            $this->internal_worksheet->setCellValueExplicit($coordinate, $value, $data_type);
+        } else {
+            $this->internal_worksheet->setCellValue($coordinate, $value);
+        }
         return $this;
     }
 }

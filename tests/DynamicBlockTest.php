@@ -222,7 +222,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $data_type = DataType::TYPE_STRING;
 
         $block = new DynamicBlock();
-        $block->setCellValueExplicit('A1', $value, $data_type);
+        $block->setCellValue('A1', $value, $data_type);
         $cell = $block->getCell('A1');
 
         $this->assertInstanceOf(Cell::class, $cell);
