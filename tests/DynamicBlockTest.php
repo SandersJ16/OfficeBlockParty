@@ -17,7 +17,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     public function testGetHeightOnEmptyBlock()
     {
         $block = new DynamicBlock();
-        $this->assertEquals(0, $block->getHeight());
+        $this->assertEquals(1, $block->getHeight());
     }
 
     /**
@@ -28,7 +28,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     public function testGetWidthOnEmptyBlock()
     {
         $block = new DynamicBlock();
-        $this->assertEquals(0, $block->getWidth());
+        $this->assertEquals(1, $block->getWidth());
     }
 
 
@@ -41,11 +41,11 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     {
         return [
             'Test adding a cell with a null value still affects height' =>
-                ['addCell', ['E5', null], 5],
+                ['setCellValue', ['E5', null], 5],
             'Test adding a cell to the first row sets height to 1' =>
-                ['addCell', ['Q1', 'test'], 1],
+                ['setCellValue', ['Q1', 'test'], 1],
             "Test adding a cell to any row greater than 1 sets the height to that cell's row" =>
-                ['addCell', ['AX70', 'test'], 70],
+                ['setCellValue', ['AX70', 'test'], 70],
         ];
     }
 
@@ -76,11 +76,11 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     {
         return [
             'Test adding a cell with a null value still affects width' =>
-                ['addCell', ['D3', null], 4],
+                ['setCellValue', ['D3', null], 4],
             'Test adding a cell to the first column sets width to 1' =>
-                ['addCell', ['A12', 'test'], 1],
+                ['setCellValue', ['A12', 'test'], 1],
             "Test adding a cell to any column after A sets the width to that cell's row" =>
-                ['addCell', ['AX10', 'test'], 50],
+                ['setCellValue', ['AX10', 'test'], 50],
         ];
     }
 
@@ -113,9 +113,9 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $expected_cell_value = null;
 
         $block = new DynamicBlock();
-        $block->addCell($cell, $expected_cell_value);
+        $block->setCellValue($cell, $expected_cell_value);
 
-        $cell_value = $block->getCellData($cell);
+        $cell_value = $block->getCellValue($cell);
 
         $this->assertEquals($expected_cell_value, $cell_value);
     }
@@ -131,9 +131,9 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $expected_cell_value = 'test';
 
         $block = new DynamicBlock();
-        $block->addCell($cell, $expected_cell_value);
+        $block->setCellValue($cell, $expected_cell_value);
 
-        $cell_value = $block->getCellData($cell);
+        $cell_value = $block->getCellValue($cell);
 
         $this->assertEquals($expected_cell_value, $cell_value);
     }
@@ -146,23 +146,23 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     public function testGettingCellDataFromOutsideOfBlock()
     {
         $block = new DynamicBlock();
-        $block->addCell('B2', null);
+        $block->setCellValue('B2', null);
 
         $this->expectException(CellOutOfBlockException::class);
-        $cell_value = $block->getCellData('C3');
+        $cell_value = $block->getCellValue('C3');
     }
 
     /**
-     * Test getting cell data from inside of a block that has never had addCell called on it
+     * Test getting cell data from inside of a block that has never had setCellValue called on it
      *
      * @return void
      */
     public function testGettingCellDataFromCellNeverExpclitilySetButInBlockRange()
     {
         $block = new DynamicBlock();
-        $block->addCell('Z20', null);
+        $block->setCellValue('Z20', null);
 
-        $cell_value = $block->getCellData('A1');
+        $cell_value = $block->getCellValue('A1');
         $this->assertEquals(null, $cell_value);
     }
 
@@ -222,7 +222,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $data_type = DataType::TYPE_STRING;
 
         $block = new DynamicBlock();
-        $block->addCell('A1', $value, $data_type);
+        $block->setCellValueExplicit('A1', $value, $data_type);
         $cell = $block->getCell('A1');
 
         $this->assertInstanceOf(Cell::class, $cell);
