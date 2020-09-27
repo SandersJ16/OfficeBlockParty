@@ -10,7 +10,7 @@ use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 final class DynamicBlockTest extends OfficeBlockPartyTestCase
 {
     /**
-     * Test the DynamicBlock::getHeight function when no cells have been added
+     * Test the DynamicBlock::getHeight function when no cells have been added.
      *
      * @return void
      */
@@ -21,7 +21,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test the DynamicBlock::getWidth function when no cells have been added
+     * Test the DynamicBlock::getWidth function when no cells have been added.
      *
      * @return void
      */
@@ -33,7 +33,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
 
     /**
-     * Data provider for testing DynamicBlock::getHeight, see DynamicBlockTest::testGetHeight for expected data provider values
+     * Data provider for testing DynamicBlock::getHeight, see DynamicBlockTest::testGetHeight for expected data provider values.
      *
      * @return array
      */
@@ -50,13 +50,13 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test DynamicBlock::getHeight for all functions that can modify a blocks height
+     * Test DynamicBlock::getHeight for all functions that can modify a blocks height.
      *
      * @dataProvider getHeightDataProvider
      *
-     * @param  string $testing_function   Name of the function to call
-     * @param  array  $function_arguments Arguments to pass to the unction
-     * @param  int    $expected_height    The expected height of the block after the function call
+     * @param  string $testing_function    Name of the function to call.
+     * @param  array  $function_arguments  Arguments to pass to the unction.
+     * @param  int    $expected_height     The expected height of the block after the function call.
      *
      * @return void
      */
@@ -68,7 +68,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Data provider for testing DynamicBlock::getWidth, see DynamicBlockTest::testGetWidth for expected data provider values
+     * Data provider for testing DynamicBlock::getWidth, see DynamicBlockTest::testGetWidth for expected data provider values.
      *
      * @return array
      */
@@ -85,13 +85,13 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test DynamicBlock::getWidth for all functions that can modify a blocks width
+     * Test DynamicBlock::getWidth for all functions that can modify a blocks width.
      *
      * @dataProvider getWidthDataProvider
      *
-     * @param  string $testing_function   Name of the function to call
-     * @param  array  $function_arguments Arguments to pass to the unction
-     * @param  int    $expected_width     The expected width of the block after the function call
+     * @param  string $testing_function    Name of the function to call.
+     * @param  array  $function_arguments  Arguments to pass to the unction.
+     * @param  int    $expected_width      The expected width of the block after the function call.
      *
      * @return void
      */
@@ -103,7 +103,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test adding a cell with no data returns null
+     * Test adding a cell with no data returns null.
      *
      * @return void
      */
@@ -121,7 +121,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test adding a cell to a block with a text value returns that text
+     * Test adding a cell to a block with a text value returns that text.
      *
      * @return void
      */
@@ -139,7 +139,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test getting cell data from outside of the block throws the appropriate exception
+     * Test getting cell data from outside of the block throws the appropriate exception.
      *
      * @return void
      */
@@ -153,7 +153,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test getting cell data from inside of a block that has never had setCellValue called on it
+     * Test getting cell data from inside of a block that has never had setCellValue called on it.
      *
      * @return void
      */
@@ -167,7 +167,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Data Provider for testing DynamicBlock::getSizedBlock method
+     * Data Provider for testing DynamicBlock::getSizedBlock method.
      *
      * @return array
      */
@@ -188,14 +188,14 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test the getSizedBlock method
+     * Test the getSizedBlock method.
      *
      * @dataProvider getSizedBlockDataProvider
      *
-     * @param  int     $height                   Height of the sized block requested
-     * @param  int     $width                    Width of the sized block requested
-     * @param  ?string $expected_exception_class The class of the exception that should be thrown,
-     *                                           null if no exception should be thrown
+     * @param  int     $height                    Height of the sized block requested.
+     * @param  int     $width                     Width of the sized block requested.
+     * @param  ?string $expected_exception_class  The class of the exception that should be thrown,
+     *                                            null if no exception should be thrown.
      *
      * @return void
      */
@@ -212,7 +212,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCell returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell
+     * Test that DynamicBlock::getCell returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell.
      *
      * @return array<string, string, Cell>
      */
@@ -232,12 +232,12 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCell returns a cell with the expected value
+     * Test that DynamicBlock::getCell returns a cell with the expected value.
      *
      * @depends testGetCellReturnsAPHPSpreadsheetCell
      *
-     * @param  array $arguments     An array containing the cell returned by the method,
-     *                              expected value and expected data type
+     * @param  array $arguments  An array containing the cell returned by the method,
+     *                           expected value and expected data type.
      *
      * @return void
      */
@@ -249,12 +249,12 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCell returns a cell with the expected data type
+     * Test that DynamicBlock::getCell returns a cell with the expected data type.
      *
      * @depends testGetCellReturnsAPHPSpreadsheetCell
      *
-     * @param  array $arguments     An array containing the cell returned by the method,
-     *                              expected value and expected data type
+     * @param  array $arguments  An array containing the cell returned by the method,
+     *                           expected value and expected data type.
      *
      * @return void
      */
@@ -266,7 +266,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCellByColumnAndRow returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell
+     * Test that DynamicBlock::getCellByColumnAndRow returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell.
      *
      * @return array<string, string, Cell>
      */
@@ -286,12 +286,12 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected value
+     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected value.
      *
      * @depends testGetCellByColumnAndRowReturnsAPHPSpreadsheetCell
      *
      * @param  array $arguments     An array containing the cell returned by the method,
-     *                              expected value and expected data type
+     *                              expected value and expected data type.
      *
      * @return void
      */
@@ -303,12 +303,12 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected data type
+     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected data type.
      *
      * @depends testGetCellByColumnAndRowReturnsAPHPSpreadsheetCell
      *
      * @param  array $arguments     An array containing the cell returned by the method,
-     *                              expected value and expected data type
+     *                              expected value and expected data type.
      *
      * @return void
      */
@@ -320,7 +320,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getHighestColumn returns 'A' when called on an empty block
+     * Test that DynamicBlock::getHighestColumn returns 'A' when called on an empty block.
      *
      * @return void
      */
@@ -332,7 +332,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that DynamicBlock::getHighestColumn returns 'A' when
-     * called on a block that only has values in the first column
+     * called on a block that only has values in the first column.
      *
      * @return void
      */
@@ -346,7 +346,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     /**
      * Test that DynamicBlock::getHighestColumn returns the correct
      * column when called on a block that has values in columns
-     * other than the first column
+     * other than the first column.
      *
      * @return void
      */
@@ -359,7 +359,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that DynamicBlock::getHighestColumn returns 'A'
-     * when called on a specific row that has no values set
+     * when called on a specific row that has no values set.
      *
      * @return void
      */
@@ -373,7 +373,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     /**
      * Test that DynamicBlock::getHighestColumn returns the correct value
      * when called on a specific row that has values in columns other
-     * than the first column
+     * than the first column.
      *
      * @return void
      */
@@ -386,7 +386,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that calling DynamicBlock::getHighestColumn with a row number
-     * outside of the block throws the appropriate exception
+     * outside of the block throws the appropriate exception.
      *
      * @return void
      */
@@ -399,7 +399,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that calling DynamicBlock::getHighestColumn with a
-     * negative row number throws the appropriate exception
+     * negative row number throws the appropriate exception.
      *
      * @return void
      */
@@ -411,7 +411,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
-     * Test that DynamicBlock::getHighestRow returns 1 when called on an empty block
+     * Test that DynamicBlock::getHighestRow returns 1 when called on an empty block.
      *
      * @return void
      */
@@ -423,7 +423,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that DynamicBlock::getHighestRow returns 1 when
-     * called on a block that only has values in the first row
+     * called on a block that only has values in the first row.
      *
      * @return void
      */
@@ -437,7 +437,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     /**
      * Test that DynamicBlock::getHighestRow returns the correct
      * column when called on a block that has values in rows
-     * other than the first row
+     * other than the first row.
      *
      * @return void
      */
@@ -450,7 +450,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that DynamicBlock::getHighestRow returns 'A'
-     * when called on a specific column that has no values set
+     * when called on a specific column that has no values set.
      *
      * @return void
      */
@@ -464,7 +464,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     /**
      * Test that DynamicBlock::getHighestRow returns the correct value
      * when called on a specific column that has values in rows other
-     * than the first row
+     * than the first row.
      *
      * @return void
      */
@@ -477,7 +477,7 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that calling DynamicBlock::getHighestRow with a column
-     * outside of the block throws the appropriate exception
+     * outside of the block throws the appropriate exception.
      *
      * @return void
      */

@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 interface GridBlockWorksheet
 {
     /**
-     * Add a block as the first block in a new row on this worksheet
+     * Add a block as the first block in a new row on this worksheet.
      *
      * @param  Block $block
      *
@@ -17,7 +17,7 @@ interface GridBlockWorksheet
     public function addBlockAsRow(Block $block);
 
     /**
-     * Add a block as a new column on the current last block row of this worksheet
+     * Add a block as a new column on the current last block row of this worksheet.
      *
      * @param  Block $block
      *
@@ -26,7 +26,7 @@ interface GridBlockWorksheet
     public function appendBlockToLastRow(Block $block);
 
     /**
-     * Add a block as a new column to a specific row number on this worksheet
+     * Add a block as a new column to a specific row number on this worksheet.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -36,7 +36,7 @@ interface GridBlockWorksheet
     public function appendBlockToRow(Block $block, int $row_number);
 
     /**
-     * Insert a block as a new row after an existing row
+     * Insert a block as a new row after an existing row.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -46,7 +46,7 @@ interface GridBlockWorksheet
     public function insertBlockAfterRow(Block $block, $row_number);
 
     /**
-     * Insert a block as a new row before an existing row
+     * Insert a block as a new row before an existing row.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -56,7 +56,7 @@ interface GridBlockWorksheet
     public function insertBlockBeforeRow(Block $block, $row_number);
 
     /**
-     * Insert a block into a row after an existing column
+     * Insert a block into a row after an existing column.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -67,7 +67,7 @@ interface GridBlockWorksheet
     public function insertBlockAfterColumn(Block $block, $row_number, $column_number);
 
     /**
-     * Insert a block into a row before an existing column
+     * Insert a block into a row before an existing column.
      *
      * @param  Block  $block
      * @param  int    $row_number

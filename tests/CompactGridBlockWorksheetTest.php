@@ -9,7 +9,7 @@ final class CompactGridBlockWorksheetTest extends OfficeBlockPartyTestCase
 {
     /**
      * Data provider for testing invalidArgumentException when adding a block to a CompactGridBlockWorksheet
-     * See `testInvalidArgumentsOnBlockInsertion` for description of returned parameters
+     * See `testInvalidArgumentsOnBlockInsertion` for description of returned parameters.
      *
      * @return array
      */
@@ -71,14 +71,14 @@ final class CompactGridBlockWorksheetTest extends OfficeBlockPartyTestCase
 
     /**
      * Test that adding blocks to a CompactGridBlockWorksheet throws
-     * an InvalidArgumentException when supplied invalid parameters
+     * an InvalidArgumentException when supplied invalid parameters.
      *
      * @dataProvider invalidArgumentDataProvider
      *
-     * @param  array $pre_add_block_methods   An array of CompactGridBlockWorksheet methods used to add
-     *                                            empty Dynamic blocks to it prior to expecting failure
-     * @param  array $failure_method          Method to call with expected failure
-     * @param  array $extra_args              Extra arguments to pass to $failure_method
+     * @param  array $pre_add_block_methods  An array of CompactGridBlockWorksheet methods used to add
+     *                                       empty Dynamic blocks to it prior to expecting failure.
+     * @param  array $failure_method         Method to call with expected failure.
+     * @param  array $extra_args             Extra arguments to pass to $failure_method.
      *
      * @return void
      */
@@ -94,7 +94,7 @@ final class CompactGridBlockWorksheetTest extends OfficeBlockPartyTestCase
 
     /**
      * Data Provider for testing inserting blocks into a CompactGridBlockWorksheet.
-     * See `testWorksheetBlockInsertionMethods` for descritption of returned parameter
+     * See `testWorksheetBlockInsertionMethods` for descritption of returned parameter.
      *
      * @return array
      */
@@ -243,7 +243,7 @@ final class CompactGridBlockWorksheetTest extends OfficeBlockPartyTestCase
 
     /**
      * Test creating dynamic blocks and adding them to worksheets.
-     * This test will
+     * This test will:
      * - create a set of blocks
      * - add them to a CompactGridBlockWorksheet and Spreedsheet
      * - write the Spreedsheet to disk
@@ -252,8 +252,8 @@ final class CompactGridBlockWorksheetTest extends OfficeBlockPartyTestCase
      *
      * @dataProvider blockWorksheetInsertionDataProvider
      *
-     * @param  string $file_name    Filename to save the worksheet as
-     * @param  array  $cell_mapping An array of arrays where each array represents a block and has four parameters:
+     * @param  string $file_name     Filename to save the worksheet as.
+     * @param  array  $cell_mapping  An array of arrays where each array represents a block and has four parameters:
      *     [
      *       $insert_coordinate   - A unique value will be inserted into this block at this coordinate
      *       $expected_coordinate - The expected location on the final Spreedsheet that should correspond with the unique value

@@ -15,7 +15,7 @@ class DynamicBlock implements Block
     /**
      * This will be the worksheet that the block's cell's configurations
      * will be tracked with. This worksheet is only to keep track of the
-     * cell's configuration, it will not be directly added to any spreadsheet
+     * cell's configuration, it will not be directly added to any spreadsheet.
      *
      * @var PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
      */
@@ -27,7 +27,7 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the height of this Block
+     * Get the height of this Block.
      *
      * @return int
      */
@@ -37,10 +37,10 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get an empty block that already has a specific height and width
+     * Get an empty block that already has a specific height and width.
      *
-     * @param  int    $height
-     * @param  int    $width
+     * @param  int $height
+     * @param  int $width
      *
      * @return self
      */
@@ -60,7 +60,7 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the width of this Block
+     * Get the width of this Block.
      *
      * @return int
      */
@@ -71,9 +71,9 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the value stored in a cell in this block
+     * Get the value stored in a cell in this block.
      *
-     * @param  string $coordinate The cell's coordinate relative to this block
+     * @param  string $coordinate  The cell's coordinate relative to this block.
      *
      * @return mixed
      */
@@ -83,14 +83,14 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get a cell from this block
+     * Get a cell from this block.
      *
-     * @param  string $coordinate The cell's coordinate relative to this block
+     * @param  string $coordinate  The cell's coordinate relative to this block.
      *
      * @return PhpOffice\PhpSpreadsheet\Cell\Cell
      *
      * @throws OfficeBlockParty\Exceptions\CellOutOfBlockException Thrown when the requested coordinate
-     *                                                             doesn't currently exist in the cell
+     *                                                             doesn't currently exist in the cell.
      */
     public function getCell($coordinate) : Cell
     {
@@ -104,10 +104,10 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get a cell from this block by its column index and row number
+     * Get a cell from this block by its column index and row number.
      *
-     * @param  int $column_index The cell's column index relative to this block
-     * @param  int $row          The cell's row number relative to this block
+     * @param  int $column_index  The cell's column index relative to this block.
+     * @param  int $row           The cell's row number relative to this block.
      *
      * @return PhpOffice\PhpSpreadsheet\Cell\Cell
      *
@@ -123,7 +123,7 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the current cell coordinates for all data in this block relative to this block
+     * Get the current cell coordinates for all data in this block relative to this block.
      *
      * @return array
      */
@@ -133,10 +133,10 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Gets the rightmost column of the block
+     * Gets the rightmost column of the block.
      *
-     * @param  ?int $row Return the rightmost column for the specified row, or
-     *                   the rightmost column of any row if no row number is passed
+     * @param  ?int $row  Return the rightmost column for the specified row, or
+     *                    the rightmost column of any row if no row number is passed.
      *
      * @return string
      */
@@ -149,10 +149,10 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Gets the highest row number of the block
+     * Gets the highest row number of the block.
      *
-     * @param  ?string $column Returns the highest row number for the specified column or
-     *                         the highest row number of any column if no column is passed
+     * @param  ?string $column  Returns the highest row number for the specified column or
+     *                          the highest row number of any column if no column is passed.
      *
      * @return int
      */
@@ -166,12 +166,12 @@ class DynamicBlock implements Block
 
     /**
      * Set the value of a cell inside the block. If the coordinate specified exists
-     * outside of the block, the blocks size will grow to accommodate the new cell
+     * outside of the block, the blocks size will grow to accommodate the new cell.
      *
      * @param  string  $coordinate
      * @param  mixed   $value
-     * @param  ?string $data_type  The data type of the new cell
-     *                             (see DataType class constants for valid values)
+     * @param  ?string $data_type   The data type of the new cell
+     *                              (see DataType class constants for valid values).
      *
      * @return self
      */
@@ -188,13 +188,13 @@ class DynamicBlock implements Block
     /**
      * Set the value of a cell inside the block using a column index and row number.
      * If the cell specified by the column index and row number exists outside of
-     * the block, the blocks size will grow to accommodate the new cell
+     * the block, the blocks size will grow to accommodate the new cell.
      *
-     * @param  int     $column_index Numeric column coordinate of the cell
-     * @param  int     $row          Numeric row coordinate of the cell
-     * @param  mixed   $value        Value to set in the cell
+     * @param  int     $column_index Numeric column coordinate of the cell.
+     * @param  int     $row          Numeric row coordinate of the cell.
+     * @param  mixed   $value        Value to set in the cell.
      * @param  ?string $data_type    The data type of the new cell
-     *                               (see DataType class constants for valid values)
+     *                               (see DataType class constants for valid values).
      *
      * @return Worksheet
      */

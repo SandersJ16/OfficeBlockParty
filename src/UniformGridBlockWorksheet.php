@@ -10,7 +10,7 @@ class UniformGridBlockWorksheet extends BlockWorksheet implements GridBlockWorks
     use GridBlockWorksheetTemplate;
 
     /**
-     * Populate this worksheets cells from rows of blocks
+     * Populate this worksheets cells from rows of blocks.
      *
      * @param  $block_rows
      *

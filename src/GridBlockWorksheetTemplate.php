@@ -5,14 +5,14 @@ namespace OfficeBlockParty;
 trait GridBlockWorksheetTemplate
 {
     /**
-     * Rows of blocks to be applied to the worksheet
+     * Rows of blocks to be applied to the worksheet.
      *
      * @var array
      */
     protected $block_rows = array();
 
     /**
-     * Add a block as the first block in a new row on this worksheet
+     * Add a block as the first block in a new row on this worksheet.
      *
      * @param  Block $block
      *
@@ -26,7 +26,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Add a block as a new column on the current last block row of this worksheet
+     * Add a block as a new column on the current last block row of this worksheet.
      *
      * @param  Block $block
      *
@@ -42,7 +42,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Add a block as a new column to a specific row number on this worksheet
+     * Add a block as a new column to a specific row number on this worksheet.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -63,7 +63,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Insert a block as a new row after an existing row
+     * Insert a block as a new row after an existing row.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -83,7 +83,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Insert a block as a new row before an existing row
+     * Insert a block as a new row before an existing row.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -102,7 +102,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Insert a block into a row after an existing column
+     * Insert a block into a row after an existing column.
      *
      * @param  Block $block
      * @param  int   $row_number
@@ -128,7 +128,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Insert a block into a row before an existing column
+     * Insert a block into a row before an existing column.
      *
      * @param  Block  $block
      * @param  int    $row_number
@@ -148,7 +148,7 @@ trait GridBlockWorksheetTemplate
     }
 
     /**
-     * Populate this worksheets cells from rows of blocks
+     * Populate this worksheets cells from rows of blocks.
      *
      * @param  $block_rows
      *
@@ -157,7 +157,7 @@ trait GridBlockWorksheetTemplate
     abstract protected function populateCellsFromBlocks($block_rows);
 
     /**
-     * Insert data into an array after a specific index
+     * Insert data into an array after a specific index.
      *
      * @param  mixed $data
      * @param  array $array

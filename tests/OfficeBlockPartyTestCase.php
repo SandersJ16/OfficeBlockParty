@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 abstract class OfficeBlockPartyTestCase extends TestCase
 {
     /**
-     * Get temporary file location for test
+     * Get temporary file location for test.
      *
      * @return string
      */
@@ -24,7 +24,7 @@ abstract class OfficeBlockPartyTestCase extends TestCase
     }
 
     /**
-     * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet
+     * Assert that a BlockWorksheet produces specific values when saved on a spreadsheet.
      *
      * @param  BlockWorksheet $worksheet
      * @param  Iterable       $expected_coordinate_values

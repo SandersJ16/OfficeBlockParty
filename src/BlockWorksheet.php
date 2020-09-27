@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class BlockWorksheet extends Worksheet
 {
     /**
-     * Clear all cells from worksheet
+     * Clear all cells from worksheet.
      *
      * @return void
      */

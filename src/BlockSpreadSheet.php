@@ -16,7 +16,7 @@ class BlockSpreadSheet extends Spreadsheet
     /**
      * Create sheet and add it to this workbook.
      *
-     * @param null|int $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     * @param null|int $sheetIndex  Index where sheet should go (0,1,..., or null for last).
      *
      * @throws Exception
      *
