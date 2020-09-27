@@ -27,16 +27,6 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the height of this Block.
-     *
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->internal_worksheet->getHighestRow();
-    }
-
-    /**
      * Get an empty block that already has a specific height and width.
      *
      * @param  int $height
@@ -60,6 +50,16 @@ class DynamicBlock implements Block
     }
 
     /**
+     * Get the height of this Block.
+     *
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->internal_worksheet->getHighestRow();
+    }
+
+    /**
      * Get the width of this Block.
      *
      * @return int
@@ -68,6 +68,33 @@ class DynamicBlock implements Block
     {
         $highest_column = $this->internal_worksheet->getHighestColumn();
         return Coordinate::columnIndexFromString($highest_column);
+    }
+
+    /**
+     * Return if a cell is currently in the block.
+     *
+     * @param  string $coordinate  The cell's coordinate relative to this block.
+     *
+     * @return bool
+     */
+    public function cellInBlock($coordinate)
+    {
+        list($column, $row) = Coordinate::coordinateFromString($coordinate);
+        $column_index = Coordinate::columnIndexFromString($column);
+        return $this->cellInBlockByColumnAndRow($column_index, $row);
+    }
+
+    /**
+     * Return if a cell is currently in the block by its column index and row number.
+     *
+     * @param  int $column_index  The cell's column index relative to this block.
+     * @param  int $row           The cell's row number relative to this block.
+     *
+     * @return bool
+     */
+    public function cellInBlockByColumnAndRow($column_index, $row)
+    {
+        return $column_index > 0 && $column_index <= $this->getWidth() && $row > 0 && $row <= $this->getHeight();
     }
 
     /**

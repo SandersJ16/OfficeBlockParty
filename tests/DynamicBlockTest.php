@@ -5,6 +5,7 @@ namespace OfficeBlockParty\Test;
 use OfficeBlockParty\DynamicBlock;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 
 final class DynamicBlockTest extends OfficeBlockPartyTestCase
@@ -486,5 +487,89 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $block = new DynamicBlock();
         $this->expectException(CellOutOfBlockException::class);
         $block->getHighestRow('F');
+    }
+
+    /**
+     * Data provider for testing cellInBlock.
+     *
+     * @return array
+     */
+    public function cellInBlockDataProvider()
+    {
+        return [
+            'Test that an empty block still contains the A1 Cell' =>
+                ['A1', [], true],
+            'Test that an empty block does not contain a cell other than the A1 cell' =>
+                ['B2', [], false],
+            'Test that a block contains a cell directly added to it' =>
+                ['C3', ['C3'], true],
+            'Test that a block contains the rightmost and largest row number of cells added to it' =>
+                ['E7', ['E1', 'A7'], true],
+            'Test that a block contains a block not explicitly added but within the added cells range' =>
+                ['B2', ['C3'], true],
+        ];
+    }
+
+    /**
+     * Run tests for DynamicBlock::cellInBlock.
+     *
+     * @dataProvider cellInBlockDataProvider
+     *
+     * @param  string $cell_to_check            Cell coordinate to check.
+     * @param  array  $cells_to_add             Cell coordinates to add to Block
+     * @param  bool   $expected_to_be_in_block  Cell to check expected to be in Block
+     *
+     * @return void
+     */
+    public function testCellInBlock($cell_to_check, $cells_to_add, $expected_to_be_in_block)
+    {
+        $block = new DynamicBlock();
+        foreach ($cells_to_add as $cell_coordinate) {
+            $block->setCellValue($cell_coordinate, null);
+        }
+        $this->assertEquals($expected_to_be_in_block, $block->cellInBlock($cell_to_check));
+    }
+
+    /**
+     * Data provider for testing cellInBlockByColumnAndRow.
+     *
+     * @return array
+     */
+    public function cellInBlockByColumnAndRowDataProvider()
+    {
+        return [
+            'Test that an empty block still contains the A1 Cell' =>
+                [[1, 1], [], true],
+            'Test that an empty block does not contain a cell other than the A1 cell' =>
+                [[2, 2], [], false],
+            'Test that a block contains a cell directly added to it' =>
+                [[3, 3], [[3, 3]], true],
+            'Test that a block contains the rightmost and largest row number of cells added to it' =>
+                [[5, 7], [[5, 1], [1, 7]], true],
+            'Test that a block contains a block not explicitly added but within the added cells range' =>
+                [[2, 2], [[3, 3]], true],
+        ];
+    }
+
+    /**
+     * Run tests for DynamicBlock::cellInBlockByColumnAndRow.
+     *
+     * @dataProvider cellInBlockByColumnAndRowDataProvider
+     *
+     * @param  array $cell_coordinate_to_check  Cell coordinate to check.
+     * @param  array $cells_to_add              Cell coordinates to add to Block
+     * @param  bool  $expected_to_be_in_block   Cell to check expected to be in Block
+     *
+     * @return void
+     */
+    public function testCellInBlockByColumnAndRow($cell_coordinate_to_check, $cells_to_add, $expected_to_be_in_block)
+    {
+        $block = new DynamicBlock();
+
+        foreach ($cells_to_add as $cell_coordinate) {
+            $block->setCellValueByColumnAndRow($cell_coordinate[0], $cell_coordinate[1], null);
+        }
+
+        $this->assertEquals($expected_to_be_in_block, $block->cellInBlockByColumnAndRow($cell_coordinate_to_check[0], $cell_coordinate_to_check[1]));
     }
 }
