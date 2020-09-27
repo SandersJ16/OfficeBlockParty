@@ -37,9 +37,9 @@ class DynamicBlock implements Block
     public static function getSizedBlock(int $height, int $width) : self
     {
         if ($height <= 0) {
-            throw new CellOutOfBlockException(sprintf("Sized Block has a minium height of 1, '%i' specified", $height));
+            throw new CellOutOfBlockException(sprintf("Sized Block has a minimum height of 1, '%i' specified", $height));
         } elseif ($width <= 0) {
-            throw new CellOutOfBlockException(sprintf("Sized Block has a minium width of 1, '%i' specified", $width));
+            throw new CellOutOfBlockException(sprintf("Sized Block has a minimum width of 1, '%i' specified", $width));
         }
 
         $block = new static();
