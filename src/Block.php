@@ -34,5 +34,5 @@ interface Block
      *
      * @return array
      */
-    public function getRelativeCellCoordinates();
+    public function getRelativeCoordinates();
 }

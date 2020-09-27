@@ -73,16 +73,6 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Gets the rightmost column of the block
-     *
-     * @return ?string Returns null if there are no cells in the block
-     */
-    public function getHighestColumn()
-    {
-        return !empty($this->cells->getCoordinates()) ? $this->cells->getHighestColumn() : null;
-    }
-
-    /**
      * Get the value stored in a cell in this block
      *
      * @param  string $coordinate The cell's coordinate relative to this block
@@ -120,34 +110,50 @@ class DynamicBlock implements Block
      *
      * @return array
      */
-    public function getRelativeCellCoordinates()
+    public function getRelativeCoordinates(...$parameters)
     {
-        return $this->internal_worksheet->getCoordinates();
+        return $this->internal_worksheet->getCoordinates(...$parameters);
     }
 
     /**
-     * Define a subset of Worksheet methods on this object by passing them through to the internal worksheet
+     * Gets the rightmost column of the block
      *
-     * @param  string $method_name
-     * @param  array $parameters
-     *
-     * @return mixed
+     * @return ?string Returns null if there are no cells in the block
      */
-    public function __call($method_name, $parameters)
+    public function getHighestColumn(...$parameters)
     {
-        $passthru_worksheet_methods = array_map(
-            'strtolower',
-            [
-                'setCellValue',
-                'setCellValueExplicit',
-                'getCell',
-            ]
-        );
+        $worksheet_method = __FUNCTION__;
+        return $this->internal_worksheet->$worksheet_method(...$parameters);
+    }
 
-        if (in_array(strtolower($method_name), $passthru_worksheet_methods)) {
-            return $this->internal_worksheet->$method_name(...$parameters);
-        }
+    /**
+     * Set a cell value.
+     *
+     * @param  string $pCoordinate Coordinate of the cell, eg: 'A1'
+     * @param  mixed  $pValue      Value of the cell
+     *
+     * @return self
+     */
+    public function setCellValue(...$parameters)
+    {
+        $worksheet_method = __FUNCTION__;
+        $this->internal_worksheet->$worksheet_method(...$parameters);
+        return $this;
+    }
 
-        throw new \BadMethodCallException("Call to undefined method " . static::class . "::$method_name() in php shell code:1");
+    /**
+     * Set a cell value.
+     *
+     * @param  string $pCoordinate Coordinate of the cell, eg: 'A1'
+     * @param  mixed  $pValue      Value of the cell
+     * @param  string $pDataType   Explicit data type, see DataType::TYPE_*
+     *
+     * @return self
+     */
+    public function setCellValueExplicit(...$parameters)
+    {
+        $worksheet_method = __FUNCTION__;
+        $this->internal_worksheet->$worksheet_method(...$parameters);
+        return $this;
     }
 }

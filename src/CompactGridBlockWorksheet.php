@@ -25,7 +25,7 @@ class CompactGridBlockWorksheet extends BlockWorksheet implements GridBlockWorks
             $horizontal_translation = 0;
             $row_max_cell_height = 0;
             foreach ($rows as $block) {
-                $relative_coordinates = $block->getRelativeCellCoordinates();
+                $relative_coordinates = $block->getRelativeCoordinates();
                 foreach ($relative_coordinates as $coordinate) {
                     $coordinate_parts = Coordinate::coordinateFromString($coordinate);
                     $column_coordinate = Coordinate::columnIndexFromString($coordinate_parts[0]) + $horizontal_translation;

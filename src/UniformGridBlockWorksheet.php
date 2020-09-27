@@ -33,7 +33,7 @@ class UniformGridBlockWorksheet extends BlockWorksheet implements GridBlockWorks
         foreach ($block_rows as $rows) {
             $horizontal_translation = 0;
             foreach ($rows as $block) {
-                $relative_coordinates = $block->getRelativeCellCoordinates();
+                $relative_coordinates = $block->getRelativeCoordinates();
                 foreach ($relative_coordinates as $coordinate) {
                     $coordinate_parts = Coordinate::coordinateFromString($coordinate);
                     $column_coordinate = Coordinate::columnIndexFromString($coordinate_parts[0]) + $horizontal_translation;
