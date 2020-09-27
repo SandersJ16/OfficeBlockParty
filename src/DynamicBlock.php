@@ -13,11 +13,9 @@ use OfficeBlockParty\Exceptions\CellOutOfBlockException;
 class DynamicBlock implements Block
 {
     /**
-     * This will be the worksheet that new cells are initilized with.
-     * The Cell class requires a Worksheet in order to be initilized
-     * so we give each block its own worksheet to hold the cells.
-     * This worksheet is only to keep track of the cells, it will
-     * not be added to the actual spreadsheet
+     * This will be the worksheet that the block's cell's configurations
+     * will be tracked with. This worksheet is only to keep track of the
+     * cell's configuration, it will not be directly added to any spreadsheet
      *
      * @var PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
      */
@@ -29,7 +27,7 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the height of this XlsxBlock
+     * Get the height of this Block
      *
      * @return int
      */
@@ -62,7 +60,7 @@ class DynamicBlock implements Block
     }
 
     /**
-     * Get the width of this XlsxBlock
+     * Get the width of this Block
      *
      * @return int
      */
@@ -77,7 +75,7 @@ class DynamicBlock implements Block
      *
      * @param  string $coordinate The cell's coordinate relative to this block
      *
-     * @return string
+     * @return mixed
      */
     public function getCellValue($coordinate)
     {
@@ -110,16 +108,16 @@ class DynamicBlock implements Block
      *
      * @return array
      */
-    public function getRelativeCoordinates(...$parameters)
+    public function getRelativeCoordinates()
     {
-        return $this->internal_worksheet->getCoordinates(...$parameters);
+        return $this->internal_worksheet->getCoordinates(true);
     }
 
     /**
      * Gets the rightmost column of the block
      *
-     * @param  ?int $row Return the rightmost column for the specified row,
-     *                   or the rightmost column of any row if no row number is passed
+     * @param  ?int $row Return the rightmost column for the specified row, or
+     *                   the rightmost column of any row if no row number is passed
      *
      * @return string
      */
@@ -134,8 +132,8 @@ class DynamicBlock implements Block
     /**
      * Gets the highest row number of the block
      *
-     * @param  ?string $column Returns the highest row number for the specified column
-     *                         or the highest row number of any column if no column is passed
+     * @param  ?string $column Returns the highest row number for the specified column or
+     *                         the highest row number of any column if no column is passed
      *
      * @return int
      */
