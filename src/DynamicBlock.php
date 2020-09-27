@@ -125,7 +125,7 @@ class DynamicBlock implements Block
      */
     public function getHighestColumn($row = null)
     {
-        if ($row > $this->getHeight()) {
+        if (!is_null($row) && ($row > $this->getHeight() || $row <= 0)) {
             throw new CellOutOfBlockException(sprintf("The specified row '%i' is out of range of the block", $row));
         }
         return $this->internal_worksheet->getHighestColumn($row);

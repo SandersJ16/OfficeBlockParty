@@ -264,4 +264,95 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
         $cell = $arguments['cell'];
         $this->assertEquals($data_type, $cell->getDataType());
     }
+
+    /**
+     * Test that DynamicBlock::getHighestColumn returns 'A' when called on an empty block
+     *
+     * @return void
+     */
+    public function testGetHighestColumnOnEmptyBlock()
+    {
+        $block = new DynamicBlock();
+        $this->assertEquals('A', $block->getHighestColumn());
+    }
+
+    /**
+     * Test that DynamicBlock::getHighestColumn returns 'A' when
+     * called on a block that only has values in the first column
+     *
+     * @return void
+     */
+    public function testGetHighestColumnOnBlockWithValueInFirstColumn()
+    {
+        $block = new DynamicBlock();
+        $block->setCellValue('A5', null);
+        $this->assertEquals('A', $block->getHighestColumn());
+    }
+
+    /**
+     * Test that DynamicBlock::getHighestColumn returns the correct
+     * column when called on a block that has values in columns
+     * other than the first column
+     *
+     * @return void
+     */
+    public function testGetHighestColumnOnBlockWithValueInColumnOtherThanFirst()
+    {
+        $block = new DynamicBlock();
+        $block->setCellValue('E4', null);
+        $this->assertEquals('E', $block->getHighestColumn());
+    }
+
+    /**
+     * Test that DynamicBlock::getHighestColumn returns 'A'
+     * when called on a specific row that has no values set
+     *
+     * @return void
+     */
+    public function testGetHighestColumnForSpecificRowThatHasNoValues()
+    {
+        $block = new DynamicBlock();
+        $block->setCellValue('B7', null);
+        $this->assertEquals('A', $block->getHighestColumn(2));
+    }
+
+    /**
+     * Test that DynamicBlock::getHighestColumn returns the correct value
+     * when called on a specific row that has values in columns other
+     * than the first column
+     *
+     * @return void
+     */
+    public function testGetHighestColumnForSpecificRowThatHasValuesInColumnOtherThanFirst()
+    {
+        $block = new DynamicBlock();
+        $block->setCellValue('B7', null);
+        $this->assertEquals('B', $block->getHighestColumn(7));
+    }
+
+    /**
+     * Test that calling DynamicBlock::getHighestColumn with a row number
+     * outside of the block throws the appropriate exception
+     *
+     * @return void
+     */
+    public function testGetHighestColumnForSpecificRowOutsideOfBlock()
+    {
+        $block = new DynamicBlock();
+        $this->expectException(CellOutOfBlockException::class);
+        $block->getHighestColumn(16);
+    }
+
+    /**
+     * Test that calling DynamicBlock::getHighestColumn with a
+     * negative row number throws the appropriate exception
+     *
+     * @return void
+     */
+    public function testGetHighestColumnForNegativeRowValue()
+    {
+        $block = new DynamicBlock();
+        $this->expectException(CellOutOfBlockException::class);
+        $block->getHighestColumn(-3);
+    }
 }
