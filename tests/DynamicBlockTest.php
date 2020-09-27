@@ -3,7 +3,6 @@
 namespace OfficeBlockParty\Test;
 
 use OfficeBlockParty\DynamicBlock;
-use PHPUnit\Framework\TestCase;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use OfficeBlockParty\Exceptions\CellOutOfBlockException;
