@@ -30,7 +30,7 @@ class CompactGridBlockWorksheet extends BlockWorksheet implements GridBlockWorks
                     $coordinate_parts = Coordinate::coordinateFromString($coordinate);
                     $column_coordinate = Coordinate::columnIndexFromString($coordinate_parts[0]) + $horizontal_translation;
                     $row_coordinate = $coordinate_parts[1] + $vertical_translation;
-                    $this->setCellValueByColumnAndRow($column_coordinate, $row_coordinate, $block->getCellData($coordinate));
+                    $this->setCellValueByColumnAndRow($column_coordinate, $row_coordinate, $block->getCellValue($coordinate));
                 }
 
                 $horizontal_translation += $block->getWidth();

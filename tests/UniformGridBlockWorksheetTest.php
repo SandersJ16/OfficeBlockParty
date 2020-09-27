@@ -272,7 +272,7 @@ final class UniformGridBlockWorksheetTest extends OfficeBlockPartyTestCase
             ++$count;
             $value = "block ${count}";
             $dynamic_block = new DynamicBlock();
-            $dynamic_block->addCell($insert_coordinate, $value);
+            $dynamic_block->setCellValue($insert_coordinate, $value);
 
             $compact_block_worksheet->$block_method($dynamic_block, ...$extra_parameters);
 

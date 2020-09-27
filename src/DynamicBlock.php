@@ -122,7 +122,7 @@ class DynamicBlock implements Block
      */
     public function getRelativeCellCoordinates()
     {
-        return $this->internal_worksheet->toArray();
+        return $this->internal_worksheet->getCoordinates();
     }
 
     /**
