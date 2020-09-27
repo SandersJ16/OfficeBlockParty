@@ -132,6 +132,22 @@ class DynamicBlock implements Block
     }
 
     /**
+     * Gets the highest row number of the block
+     *
+     * @param  ?string $column Returns the highest row number for the specified column
+     *                         or the highest row number of any column if no column is passed
+     *
+     * @return int
+     */
+    public function getHighestRow($column = null)
+    {
+        if (!is_null($column) && Coordinate::columnIndexFromString($column) > $this->getWidth()) {
+            throw new CellOutOfBlockException(sprintf("The specified column '%s' is out of range of the block", $column));
+        }
+        return $this->internal_worksheet->getHighestRow($column) ?: 1; //Force 1 if has a value of 0
+    }
+
+    /**
      * Set the value of a cell inside the block. If the coordinate specified exists
      * outside of the block, the blocks size will grow to accommodate the new cell
      *
