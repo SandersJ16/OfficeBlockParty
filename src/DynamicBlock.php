@@ -33,6 +33,9 @@ class DynamicBlock implements Block
      * @param  int $width
      *
      * @return self
+     *
+     * @throws OfficeBlockParty\Exceptions\CellOutOfBlockException Thrown when an invalid height
+     *                                                             or width are provided.
      */
     public static function getSizedBlock(int $height, int $width) : self
     {
@@ -75,7 +78,7 @@ class DynamicBlock implements Block
      *
      * @param  string $coordinate  The cell's coordinate relative to this block.
      *
-     * @return bool
+     * @return boolean
      */
     public function cellInBlock($coordinate)
     {
@@ -90,7 +93,7 @@ class DynamicBlock implements Block
      * @param  int $column_index  The cell's column index relative to this block.
      * @param  int $row           The cell's row number relative to this block.
      *
-     * @return bool
+     * @return boolean
      */
     public function cellInBlockByColumnAndRow($column_index, $row)
     {
@@ -166,6 +169,9 @@ class DynamicBlock implements Block
      *                    the rightmost column of any row if no row number is passed.
      *
      * @return string
+     *
+     * @throws OfficeBlockParty\Exceptions\CellOutOfBlockException Thrown when the requested row
+     *                                                             doesn't currently exist in the cell
      */
     public function getHighestColumn($row = null)
     {
@@ -182,6 +188,9 @@ class DynamicBlock implements Block
      *                          the highest row number of any column if no column is passed.
      *
      * @return int
+     *
+     * @throws OfficeBlockParty\Exceptions\CellOutOfBlockException Thrown when the requested column
+     *                                                             doesn't currently exist in the cell
      */
     public function getHighestRow($column = null)
     {
@@ -223,7 +232,7 @@ class DynamicBlock implements Block
      * @param  ?string $data_type    The data type of the new cell
      *                               (see DataType class constants for valid values).
      *
-     * @return Worksheet
+     * @return self
      */
     public function setCellValueByColumnAndRow($column_index, $row, $value, $data_type = null)
     {

@@ -515,9 +515,9 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
      *
      * @dataProvider cellInBlockDataProvider
      *
-     * @param  string $cell_to_check            Cell coordinate to check.
-     * @param  array  $cells_to_add             Cell coordinates to add to Block
-     * @param  bool   $expected_to_be_in_block  Cell to check expected to be in Block
+     * @param  string  $cell_to_check            Cell coordinate to check.
+     * @param  array   $cells_to_add             Cell coordinates to add to Block
+     * @param  boolean $expected_to_be_in_block  Cell to check expected to be in Block
      *
      * @return void
      */
@@ -556,9 +556,9 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
      *
      * @dataProvider cellInBlockByColumnAndRowDataProvider
      *
-     * @param  array $cell_coordinate_to_check  Cell coordinate to check.
-     * @param  array $cells_to_add              Cell coordinates to add to Block
-     * @param  bool  $expected_to_be_in_block   Cell to check expected to be in Block
+     * @param  array   $cell_coordinate_to_check  Cell coordinate to check.
+     * @param  array   $cells_to_add              Cell coordinates to add to Block
+     * @param  boolean $expected_to_be_in_block   Cell to check expected to be in Block
      *
      * @return void
      */
