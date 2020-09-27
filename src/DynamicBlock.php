@@ -95,12 +95,31 @@ class DynamicBlock implements Block
     public function getCell($coordinate) : Cell
     {
         list($column, $row) = Coordinate::coordinateFromString($coordinate);
-        $column = Coordinate::columnIndexFromString($column);
+        $column_index = Coordinate::columnIndexFromString($column);
 
-        if ($row > $this->getHeight() || $column > $this->getWidth()) {
+        if ($row > $this->getHeight() || $column_index > $this->getWidth()) {
             throw new CellOutOfBlockException(sprintf("Cell '%s' is out of range the block", $coordinate));
         }
         return $this->internal_worksheet->getCell($coordinate, true);
+    }
+
+    /**
+     * Get a cell from this block by its column index and row number
+     *
+     * @param  int $column_index The cell's column index relative to this block
+     * @param  int $row          The cell's row number relative to this block
+     *
+     * @return PhpOffice\PhpSpreadsheet\Cell\Cell
+     *
+     * @throws OfficeBlockParty\Exceptions\CellOutOfBlockException Thrown when the requested coordinate
+     *                                                             doesn't currently exist in the cell
+     */
+    public function getCellByColumnAndRow($column_index, $row) : Cell
+    {
+        if ($row > $this->getHeight() || $column_index > $this->getWidth()) {
+            throw new CellOutOfBlockException(sprintf("Cell coordinates (%i, %i) is out of range the block", $column_index, $row));
+        }
+        return $this->internal_worksheet->getCellByColumnAndRow($column_index, $row, true);
     }
 
     /**
@@ -162,6 +181,29 @@ class DynamicBlock implements Block
             $this->internal_worksheet->setCellValueExplicit($coordinate, $value, $data_type);
         } else {
             $this->internal_worksheet->setCellValue($coordinate, $value);
+        }
+        return $this;
+    }
+
+    /**
+     * Set the value of a cell inside the block using a column index and row number.
+     * If the cell specified by the column index and row number exists outside of
+     * the block, the blocks size will grow to accommodate the new cell
+     *
+     * @param  int     $column_index Numeric column coordinate of the cell
+     * @param  int     $row          Numeric row coordinate of the cell
+     * @param  mixed   $value        Value to set in the cell
+     * @param  ?string $data_type    The data type of the new cell
+     *                               (see DataType class constants for valid values)
+     *
+     * @return Worksheet
+     */
+    public function setCellValueByColumnAndRow($column_index, $row, $value, $data_type = null)
+    {
+        if ($data_type) {
+            $this->internal_worksheet->setCellValueExplicitByColumnAndRow($column_index, $row, $value, $data_type);
+        } else {
+            $this->internal_worksheet->setCellValueByColumnAndRow($column_index, $row, $value);
         }
         return $this;
     }

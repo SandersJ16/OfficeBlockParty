@@ -266,6 +266,60 @@ final class DynamicBlockTest extends OfficeBlockPartyTestCase
     }
 
     /**
+     * Test that DynamicBlock::getCellByColumnAndRow returns an instance of PhpOffice\PhpSpreadsheet\Cell\Cell
+     *
+     * @return array<string, string, Cell>
+     */
+    public function testGetCellByColumnAndRowReturnsAPHPSpreadsheetCell()
+    {
+        $value = 'Test Value';
+        $data_type = DataType::TYPE_STRING;
+
+        $block = new DynamicBlock();
+        $block->setCellValueByColumnAndRow(1, 1, $value, $data_type);
+        $cell = $block->getCellByColumnAndRow(1, 1);
+
+        $this->assertInstanceOf(Cell::class, $cell);
+        return ['value'     => $value,
+                'data_type' => $data_type,
+                'cell'      => $cell];
+    }
+
+    /**
+     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected value
+     *
+     * @depends testGetCellByColumnAndRowReturnsAPHPSpreadsheetCell
+     *
+     * @param  array $arguments     An array containing the cell returned by the method,
+     *                              expected value and expected data type
+     *
+     * @return void
+     */
+    public function testTheCellReturnedByGetCellFromColumnAndRowContainsTheRightValue(array $arguments)
+    {
+        $value = $arguments['value'];
+        $cell = $arguments['cell'];
+        $this->assertEquals($value, $cell->getValue());
+    }
+
+    /**
+     * Test that DynamicBlock::getCellByColumnAndRow returns a cell with the expected data type
+     *
+     * @depends testGetCellByColumnAndRowReturnsAPHPSpreadsheetCell
+     *
+     * @param  array $arguments     An array containing the cell returned by the method,
+     *                              expected value and expected data type
+     *
+     * @return void
+     */
+    public function testTheCellReturnedByGetCellByColumnAndRowContainsTheRightDataType(array $arguments)
+    {
+        $data_type = $arguments['data_type'];
+        $cell = $arguments['cell'];
+        $this->assertEquals($data_type, $cell->getDataType());
+    }
+
+    /**
      * Test that DynamicBlock::getHighestColumn returns 'A' when called on an empty block
      *
      * @return void
